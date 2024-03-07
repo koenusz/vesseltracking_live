@@ -61,7 +61,8 @@ defmodule VesseltrackingLive.MixProject do
       {:bandit, "~> 1.2"},
       {:geo_postgis, "~> 3.0"},
       {:swarm, "~> 3.4"},
-      {:msgpax, "~> 2.4"}
+      {:msgpax, "~> 2.4"},
+      {:ranch, "~> 2.1"}
     ]
   end
 
