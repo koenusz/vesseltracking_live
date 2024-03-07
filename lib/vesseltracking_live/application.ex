@@ -10,14 +10,16 @@ defmodule VesseltrackingLive.Application do
     children = [
       VesseltrackingLiveWeb.Telemetry,
       VesseltrackingLive.Repo,
-      {DNSCluster, query: Application.get_env(:vesseltracking_live, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:vesseltracking_live, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: VesseltrackingLive.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: VesseltrackingLive.Finch},
       # Start a worker by calling: VesseltrackingLive.Worker.start_link(arg)
       # {VesseltrackingLive.Worker, arg},
       # Start to serve requests, typically the last entry
-      VesseltrackingLiveWeb.Endpoint
+      VesseltrackingLiveWeb.Endpoint,
+      VesseltrackingLive.DirectIpWorker
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
