@@ -1,8 +1,8 @@
-defmodule Vesseltracking.Track.Step do
+defmodule VesseltrackingLive.Track.Step do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Vesseltracking.Track.Step
+  alias VesseltrackingLive.Track.Step
 
   # embedded_schema is short for:
   #
@@ -41,7 +41,7 @@ defmodule Vesseltracking.Track.Step do
   end
 
   def from_point(%Geo.Point{} = point) do
-    %Vesseltracking.Track.Step{origin_timestamp: DateTime.utc_now(), point: point}
+    %__MODULE__{origin_timestamp: DateTime.utc_now(), point: point}
   end
 
   def to_map(%Step{} = step) do

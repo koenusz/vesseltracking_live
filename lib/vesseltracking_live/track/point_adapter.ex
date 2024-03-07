@@ -1,4 +1,4 @@
-defmodule Vesseltracking.PointAdapter do
+defmodule VesseltrackingLive.PointAdapter do
   def translate(point) do
     case point do
       %Geo.Point{} ->

@@ -1,8 +1,8 @@
-defmodule Vesseltracking.TrackTest do
-  use Vesseltracking.DataCase
+defmodule VesseltrackingLive.TrackTest do
+  use VesseltrackingLive.DataCase
 
-  alias Vesseltracking.Track
-  alias Vesseltracking.Track.Step
+  alias VesseltrackingLive.Track
+  alias VesseltrackingLive.Track.Step
 
   @one_point %Geo.Point{coordinates: {20, 30}}
 
@@ -57,7 +57,7 @@ defmodule Vesseltracking.TrackTest do
   end
 
   describe "trails" do
-    alias Vesseltracking.Track.Trail
+    alias VesseltrackingLive.Track.Trail
 
     test "list_trails/0 returns all trails" do
       trail = trail_fixture()

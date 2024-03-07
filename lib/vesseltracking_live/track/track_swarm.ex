@@ -1,4 +1,4 @@
-defmodule Vesseltracking.Track.TrackSwarm do
+defmodule VesseltrackingLive.Track.TrackSwarm do
   require Logger
 
   @doc """
@@ -6,7 +6,7 @@ defmodule Vesseltracking.Track.TrackSwarm do
   to the `:foo` group
   """
   def start_worker(name) do
-    {:ok, pid} = Swarm.register_name(name, Vesseltracking.Track.Supervisor, :register, [name])
+    {:ok, pid} = Swarm.register_name(name, VesseltrackingLive.Track.Supervisor, :register, [name])
     Logger.debug("started worker with name: #{name}")
     Swarm.join(:vessel, pid)
   end

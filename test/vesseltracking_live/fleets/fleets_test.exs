@@ -1,12 +1,12 @@
-defmodule Vesseltracking.FleetsTest do
-  use Vesseltracking.DataCase
+defmodule VesseltrackingLive.FleetsTest do
+  use VesseltrackingLive.DataCase
 
-  alias Vesseltracking.Fleets
+  alias VesseltrackingLive.Fleets
 
   import Support.Fixtures
 
   describe "fleets" do
-    alias Vesseltracking.Fleets.Fleet
+    alias VesseltrackingLive.Fleets.Fleet
 
     @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}
@@ -96,7 +96,7 @@ defmodule Vesseltracking.FleetsTest do
   end
 
   describe "vessels" do
-    alias Vesseltracking.Fleets.Vessel
+    alias VesseltrackingLive.Fleets.Vessel
 
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil, tracking_id: nil}
@@ -167,7 +167,7 @@ defmodule Vesseltracking.FleetsTest do
   end
 
   describe "authorizations" do
-    alias Vesseltracking.Fleets.Authorization
+    alias VesseltrackingLive.Fleets.Authorization
 
     @update_attrs %{type: "some updated type"}
     @invalid_attrs %{type: 1}

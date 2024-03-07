@@ -1,4 +1,4 @@
-defmodule Vesseltracking.Track.Utils do
+defmodule VesseltrackingLive.Track.Utils do
   alias Geo.{MultiPoint, Point}
 
   def add_point_to_multipoint(%MultiPoint{} = multi, %Point{} = point) do

@@ -1,7 +1,7 @@
-defmodule Vesseltracking.Fleets.Vessel do
+defmodule VesseltrackingLive.Fleets.Vessel do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Vesseltracking.{Fleets.Vessel, Fleets.Fleet}
+  alias VesseltrackingLive.{Fleets.Vessel, Fleets.Fleet}
 
   schema "vessels" do
     field(:name, :string)

@@ -1,9 +1,9 @@
-defmodule Vesseltracking.Track.TrackworkerTest do
-  use Vesseltracking.DataCase
+defmodule VesseltrackingLive.Track.TrackworkerTest do
+  use VesseltrackingLive.DataCase
 
-  alias Vesseltracking.Track.Trackworker
-  alias Vesseltracking.Track.Step
-  alias Vesseltracking.Track
+  alias VesseltrackingLive.Track.Trackworker
+  alias VesseltrackingLive.Track.Step
+  alias VesseltrackingLive.Track
   alias Geo.{Point}
 
   @point %Point{coordinates: {15, 30}}

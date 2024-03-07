@@ -1,14 +1,15 @@
-defmodule Vesseltracking.Fleets do
+defmodule VesseltrackingLive.Fleets do
   @moduledoc """
   The Fleets context.
   """
 
   import Ecto.Query, warn: false
-  alias Vesseltracking.Repo
+  alias VesseltrackingLive.Repo
 
-  alias Vesseltracking.Fleets.Fleet
-  alias Vesseltracking.Fleets.Authorization
-  alias Vesseltracking.Accounts
+  alias VesseltrackingLive.Fleets.Fleet
+  alias VesseltrackingLive.Fleets.Vessel
+  alias VesseltrackingLive.Fleets.Authorization
+  alias VesseltrackingLive.Accounts
 
   @doc """
   Returns the list of fleets.
@@ -174,8 +175,6 @@ defmodule Vesseltracking.Fleets do
     Fleet.changeset(fleet, %{})
   end
 
-  alias Vesseltracking.Fleets.Vessel
-
   @doc """
   Returns the list of vessels.
 
@@ -287,8 +286,6 @@ defmodule Vesseltracking.Fleets do
   def change_vessel(%Vessel{} = vessel) do
     Vessel.changeset(vessel, %{})
   end
-
-  alias Vesseltracking.Fleets.Authorization
 
   @doc """
   Returns the list of authorizations.

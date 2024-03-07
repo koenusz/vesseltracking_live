@@ -1,4 +1,4 @@
-defmodule Vesseltracking.Track.Supervisor do
+defmodule VesseltrackingLive.Track.Supervisor do
   @moduledoc """
   This is the supervisor for the worker processes you wish to distribute
   across the cluster, Swarm is primarily designed around the use case
@@ -13,7 +13,7 @@ defmodule Vesseltracking.Track.Supervisor do
 
   def init(_) do
     children = [
-      worker(Vesseltracking.Track.Trackworker, [], restart: :temporary)
+      worker(VesseltrackingLive.Track.Trackworker, [], restart: :temporary)
     ]
 
     supervise(children, strategy: :simple_one_for_one)

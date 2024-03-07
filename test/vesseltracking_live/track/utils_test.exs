@@ -1,7 +1,7 @@
-defmodule Vesseltracking.UtilsTest do
-  use Vesseltracking.DataCase
+defmodule VesseltrackingLive.UtilsTest do
+  use VesseltrackingLive.DataCase
 
-  alias Vesseltracking.Track.Utils
+  alias VesseltrackingLive.Track.Utils
   alias Geo.{MultiPoint, Point}
   @point %Point{coordinates: {15, 30}}
   @multi_point %MultiPoint{coordinates: [{20, 30}, {25, 30}]}

@@ -1,9 +1,9 @@
-defmodule Vesseltracking.Track.Trail do
+defmodule VesseltrackingLive.Track.Trail do
   use Ecto.Schema
   import Ecto.Changeset
   import Logger
 
-  alias Vesseltracking.Track.Trail
+  alias VesseltrackingLive.Track.Trail
 
   schema "trails" do
     field(:day, :date, default: Date.utc_today())

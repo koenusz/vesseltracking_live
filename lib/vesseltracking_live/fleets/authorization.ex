@@ -1,8 +1,8 @@
-defmodule Vesseltracking.Fleets.Authorization do
+defmodule VesseltrackingLive.Fleets.Authorization do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Vesseltracking.Fleets.Fleet
-  alias Vesseltracking.Accounts.User
+  alias VesseltrackingLive.Fleets.Fleet
+  alias VesseltrackingLive.Accounts.User
 
   schema "authorizations" do
     field(:type, :string, default: "regular")

@@ -1,8 +1,8 @@
-defmodule Vesseltracking.Track.Trackworker do
+defmodule VesseltrackingLive.Track.Trackworker do
   use GenServer
 
-  alias Vesseltracking.Track
-  alias Vesseltracking.Track.{Trail, Step}
+  alias VesseltrackingLive.Track
+  alias VesseltrackingLive.Track.{Trail, Step}
 
   @doc """
   Starts a tracking worker.
@@ -14,11 +14,11 @@ defmodule Vesseltracking.Track.Trackworker do
   # client interface
 
   @doc """
-  Add a %Vesseltracking.Track.Step{} to the workers trail.
+  Add a %VesseltrackingLive.Track.Step{} to the workers trail.
 
   ## Examples
 
-      iex> add_step(worker, %Vesseltracking.Track.Step{})
+      iex> add_step(worker, %VesseltrackingLive.Track.Step{})
       {:ok, %Trail{}}
 
       iex> add_step(456)
@@ -72,11 +72,11 @@ defmodule Vesseltracking.Track.Trackworker do
     {:reply, new_trail, new_trail}
   end
 
-  def handle_call({:get}, _from, %Vesseltracking.Track.Trail{} = trail) do
+  def handle_call({:get}, _from, %VesseltrackingLive.Track.Trail{} = trail) do
     {:reply, trail, trail}
   end
 
-  def handle_call({:store}, _from, %Vesseltracking.Track.Trail{} = state) do
+  def handle_call({:store}, _from, %VesseltrackingLive.Track.Trail{} = state) do
     {:ok, trail} =
       Track.get_todays_trail(state.tracking_id)
       |> Track.update_trail(%{"steps" => state.steps})

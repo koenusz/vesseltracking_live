@@ -1,15 +1,16 @@
-defmodule Vesseltracking.Track do
+defmodule VesseltrackingLive.Track do
   @moduledoc """
   The Track context.
   """
 
   import Ecto.Query, warn: false
-  alias Vesseltracking.Repo
+  alias VesseltrackingLive.Repo
 
-  alias Vesseltracking.Track.Trail
-  alias Vesseltracking.Fleets.Vessel
-  alias Vesseltracking.PointAdapter
-  alias Vesseltracking.Track.{TrackSwarm, Trackworker}
+  alias VesseltrackingLive.Track.Trail
+  alias VesseltrackingLive.Track.Step
+  alias VesseltrackingLive.Fleets.Vessel
+  alias VesseltrackingLive.PointAdapter
+  alias VesseltrackingLive.Track.{TrackSwarm, Trackworker}
 
   @doc """
   Translate inpot sent to the application to a %Geo.Point{} .
@@ -200,7 +201,7 @@ defmodule Vesseltracking.Track do
   end
 
   @doc """
-  Returns a `%Vesseltracking.Track.Trail{}` .
+  Returns a `%VesseltrackingLive.Track.Trail{}` .
 
   ## Examples
 
@@ -208,7 +209,7 @@ defmodule Vesseltracking.Track do
       %Trail{}
 
   """
-  def add_step(tracking_id, %Vesseltracking.Track.Step{} = step) do
+  def add_step(tracking_id, %Step{} = step) do
     {:ok, worker} = get_or_start_worker(tracking_id)
     response = Trackworker.add_step(worker, step)
     Trackworker.store_state(worker)
