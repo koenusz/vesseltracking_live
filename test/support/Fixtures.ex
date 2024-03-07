@@ -1,10 +1,10 @@
 defmodule Support.Fixtures do
-  alias Vesseltracking.Accounts
-  alias Vesseltracking.Fleets
-  alias Vesseltracking.Track
-  alias Vesseltracking.Notifications
-  alias Vesseltracking.Chat
-  alias Vesseltracking.Chat.ChatRoomMember
+  alias VesseltrackingLive.Accounts
+  alias VesseltrackingLive.Fleets
+  alias VesseltrackingLive.Track
+  alias VesseltrackingLive.Notifications
+  alias VesseltrackingLive.Chat
+  alias VesseltrackingLive.Chat.ChatRoomMember
 
   @valid_notification_alert %{
     created_on: "2010-04-17T14:00:00Z",
@@ -34,15 +34,6 @@ defmodule Support.Fixtures do
       |> Notifications.create_notification()
 
     notification
-  end
-
-  def company_fixture(attrs \\ %{}) do
-    {:ok, company} =
-      attrs
-      |> into_if_not_present(%{name: random_string(5)})
-      |> Accounts.create_company()
-
-    company
   end
 
   @valid_user_attrs %{
@@ -77,12 +68,9 @@ defmodule Support.Fixtures do
   @valid_fleet_attrs %{name: "some name"}
 
   def fleet_fixture(attrs \\ %{}) do
-    company = company_fixture(attrs)
-
     {:ok, fleet} =
       attrs
       |> Enum.into(@valid_fleet_attrs)
-      |> into_if_not_present(%{company_id: company.id})
       |> Fleets.create_fleet()
 
     fleet
@@ -103,23 +91,9 @@ defmodule Support.Fixtures do
     vessel
   end
 
-  def employee_fixture(attrs \\ %{}) do
-    company = company_fixture()
-    user = user_fixture()
-
-    {:ok, employee} =
-      attrs
-      |> into_if_not_present(%{company_id: company.id})
-      |> into_if_not_present(%{user_id: user.id})
-      |> Accounts.create_employee()
-
-    employee
-  end
-
   def authorization_fixture(attrs \\ %{}) do
     user = user_fixture()
     fleet = fleet_fixture()
-    employee_fixture(%{user_id: user.id, company_id: fleet.company_id})
 
     {:ok, authorization} =
       attrs
@@ -146,30 +120,6 @@ defmodule Support.Fixtures do
     name: "some name",
     members: []
   }
-
-  def chat_room_member_fixture(attrs \\ %{}) do
-    user = user_fixture()
-    room = chat_room_fixture()
-
-    {:ok, chat_room_member} =
-      Chat.create_chat_room_member(%{chat_room_id: room.id, user_id: user.id} |> Enum.into(attrs))
-
-    chat_room_member
-  end
-
-  def chat_room_fixture(attrs \\ %{}) do
-    owner = user_fixture()
-    member = %{user_id: owner.id, privileges: ChatRoomMember.admin()}
-    company = company_fixture()
-
-    attrs =
-      attrs
-      |> into_if_not_present(%{company_id: company.id, members: [member]})
-      |> Enum.into(@chat_room_attrs)
-
-    {:ok, chat_room} = Chat.create_chat_room(attrs)
-    chat_room
-  end
 
   defp into_if_not_present(enum, item) do
     case Enum.member?(enum, item) do
