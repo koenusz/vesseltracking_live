@@ -1,9 +1,22 @@
 defmodule VesseltrackingLive.FleetsTest do
+  alias VesseltrackingLive.AccountsFixtures
   use VesseltrackingLive.DataCase
 
   alias VesseltrackingLive.Fleets
 
   import Support.Fixtures
+  import VesseltrackingLive.AccountsFixtures
+
+  setup %{} do
+    user = AccountsFixtures.user_fixture()
+    fleet = fleet_fixture(%{name: "my fleet"})
+
+    %{
+      user: user,
+      fleet: fleet,
+      autorization: authorization_fixture(%{user_id: user.id, fleet_id: fleet.id})
+    }
+  end
 
   describe "fleets" do
     alias VesseltrackingLive.Fleets.Fleet
@@ -12,9 +25,7 @@ defmodule VesseltrackingLive.FleetsTest do
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
-    test "list_fleets/0 returns all fleets" do
-      fleet = fleet_fixture()
-
+    test "list_fleets/0 returns all fleets", %{fleet: fleet} do
       [returned] = Fleets.list_fleets()
       assert returned.id == fleet.id
       assert returned.name == fleet.name
@@ -32,40 +43,13 @@ defmodule VesseltrackingLive.FleetsTest do
       assert List.first(Fleets.get_fleets_by_user!(no_admin.id)).id == List.first([my_fleet]).id
     end
 
-    test "get_fleets_by_company/1 returns all for this company" do
-      company = company_fixture()
-      user = user_fixture(%{email: "burp@b131la.nl", administrator: false})
-      user2 = user_fixture(%{email: "burp2@bl223a.nl", administrator: false})
-      my_fleet = fleet_fixture(%{name: "my fleet", company_id: company.id})
-      my_fleet2 = fleet_fixture(%{name: "my fleet2", company_id: company.id})
-      authorization_fixture(%{user_id: user.id, fleet_id: my_fleet.id})
-      authorization_fixture(%{user_id: user2.id, fleet_id: my_fleet2.id})
-
-      returned = Fleets.get_fleets_by_company(company.id)
-
-      assert length(returned) == 2
-
-      returnedusers =
-        returned
-        |> Enum.flat_map(fn fleet -> fleet.authorized_users end)
-        |> Enum.map(fn x -> x.id end)
-
-      assert user.id in returnedusers
-    end
-
     test "get_fleet!/1 returns the fleet with given id" do
       fleet = fleet_fixture()
       assert Fleets.get_fleet!(fleet.id).id == fleet.id
     end
 
     test "create_fleet/1 with valid data creates a fleet" do
-      company = company_fixture()
-
-      input =
-        @valid_attrs
-        |> Map.put(:company_id, company.id)
-
-      assert {:ok, %Fleet{} = fleet} = Fleets.create_fleet(input)
+      assert {:ok, %Fleet{} = fleet} = Fleets.create_fleet()
       assert fleet.name == "some name"
       returned = Fleets.get_fleet!(fleet.id)
 
@@ -113,9 +97,6 @@ defmodule VesseltrackingLive.FleetsTest do
 
     test "get_vessels_by_fleet/1 returns all for this fleet" do
       fleet = fleet_fixture()
-
-      my_vessel = vessel_fixture(%{name: "my vessel", fleet_id: fleet.id})
-      my_vessel2 = vessel_fixture(%{name: "my vessel2", fleet_id: fleet.id})
 
       returned = Fleets.get_vessels_by_fleet_id(fleet.id)
 

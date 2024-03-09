@@ -14,8 +14,8 @@ defmodule VesseltrackingLive.DirectIpProtocol do
     {:ok, args}
   end
 
-  def init(ref, socket, transport) do
-    :ok = :ranch.accept_ack(ref)
+  def init(_ref, socket, transport) do
+    # :ok = :ranch.accept_ack(ref)
     :ok = transport.setopts(socket, [{:active, true}])
     :gen_server.enter_loop(__MODULE__, [], %{socket: socket, transport: transport})
   end
@@ -87,7 +87,7 @@ defmodule VesseltrackingLive.DirectIpProtocol do
   defp store_and_forward_step(step, tracking_id) do
     {:ok, _} = Track.add_step(tracking_id, step)
 
-    VesseltrackingWeb.Endpoint.broadcast!(
+    VesseltrackingLiveWeb.Endpoint.broadcast!(
       "vessel:" <> tracking_id,
       "message",
       %{"body" => step}

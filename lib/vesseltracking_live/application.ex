@@ -18,8 +18,8 @@ defmodule VesseltrackingLive.Application do
       # Start a worker by calling: VesseltrackingLive.Worker.start_link(arg)
       # {VesseltrackingLive.Worker, arg},
       # Start to serve requests, typically the last entry
-      VesseltrackingLiveWeb.Endpoint,
-      VesseltrackingLive.DirectIpWorker
+      VesseltrackingLiveWeb.Endpoint
+      # VesseltrackingLive.DirectIpWorker
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

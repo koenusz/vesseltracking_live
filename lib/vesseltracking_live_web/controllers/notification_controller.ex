@@ -16,15 +16,15 @@ defmodule VesseltrackingLiveWeb.NotificationController do
     render(conn, "index.json", notifications: notifications)
   end
 
-  def create(conn, %{"notification" => notification_params}) do
-    with {:ok, %Notification{} = notification} <-
-           Notifications.create_notification(notification_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.notification_path(conn, :show, notification))
-      |> render("show.json", notification: notification)
-    end
-  end
+  # def create(conn, %{"notification" => notification_params}) do
+  #   with {:ok, %Notification{} = notification} <-
+  #          Notifications.create_notification(notification_params) do
+  #     conn
+  #     |> put_status(:created)
+  #     |> put_resp_header("location", Routes.notification_path(conn, :show, notification))
+  #     |> render("show.json", notification: notification)
+  #   end
+  # end
 
   def show(conn, %{"id" => id}) do
     notification = Notifications.get_notification!(id)

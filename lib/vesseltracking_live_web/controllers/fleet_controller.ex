@@ -18,14 +18,14 @@ defmodule VesseltrackingLiveWeb.FleetController do
     render(conn, "index.json", fleets: fleets)
   end
 
-  def create(conn, %{"fleet" => fleet_params}) do
-    with {:ok, %Fleet{} = fleet} <- Fleets.create_fleet(fleet_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.fleet_path(conn, :show, fleet))
-      |> render("show.json", fleet: fleet)
-    end
-  end
+  # def create(conn, %{"fleet" => fleet_params}) do
+  #   with {:ok, %Fleet{} = fleet} <- Fleets.create_fleet(fleet_params) do
+  #     conn
+  #     |> put_status(:created)
+  #     |> put_resp_header("location", Routes.fleet_path(conn, :show, fleet))
+  #     |> render("show.json", fleet: fleet)
+  #   end
+  # end
 
   def show(conn, %{"id" => id}) do
     fleet = Fleets.get_fleet!(id)

@@ -1,7 +1,6 @@
 defmodule VesseltrackingLiveWeb.AuthorizationController do
   use VesseltrackingLiveWeb, :controller
 
-  alias VesseltrackingLive.Accounts
   alias VesseltrackingLive.Fleets
   alias VesseltrackingLive.Fleets.Authorization
 
@@ -14,16 +13,8 @@ defmodule VesseltrackingLiveWeb.AuthorizationController do
     render(conn, "index.json", authorizations: authorizations)
   end
 
-  def init_authorization_page(conn, _params) do
-    companies = Accounts.get_companies_by_user!(conn.assigns[:user_id])
-
-    fleets =
-      case companies do
-        [] -> []
-        [h | _t] -> Fleets.get_fleets_by_company(h.id)
-      end
-
-    render(conn, "init.json", %{companies: companies, fleets: fleets})
+  def init_authorization_page(_conn, _params) do
+    # render(conn, "init.json", %{companies: companies, fleets: fleets})
   end
 
   def list_in_user_ids(conn, %{"userIds" => user_ids}) do
@@ -31,15 +22,15 @@ defmodule VesseltrackingLiveWeb.AuthorizationController do
     render(conn, "index.json", authorizations: authorizations)
   end
 
-  def create(conn, %{"authorization" => authorization_params}) do
-    with {:ok, %Authorization{} = authorization} <-
-           Fleets.create_authorization(authorization_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.authorization_path(conn, :show, authorization))
-      |> render("show.json", authorization: authorization)
-    end
-  end
+  # def create(conn, %{"authorization" => authorization_params}) do
+  #   with {:ok, %Authorization{} = authorization} <-
+  #          Fleets.create_authorization(authorization_params) do
+  #     conn
+  #     |> put_status(:created)
+  #     |> put_resp_header("location", Routes.authorization_path(conn, :show, authorization))
+  #     |> render("show.json", authorization: authorization)
+  #   end
+  # end
 
   def show(conn, %{"id" => id}) do
     authorization = Fleets.get_authorization!(id)
@@ -68,10 +59,10 @@ defmodule VesseltrackingLiveWeb.AuthorizationController do
           delete_by_user_id_and_fleet_id(conn, %{"authorization" => authorization_params})
         end
 
-      "create" ->
-        if authorization == nil do
-          create(conn, %{"authorization" => authorization_params})
-        end
+        # "create" ->
+        #   if authorization == nil do
+        #     create(conn, %{"authorization" => authorization_params})
+        #   end
     end
 
     send_resp(conn, :no_content, "")

@@ -6,7 +6,6 @@ defmodule VesseltrackingLive.Fleets.Vessel do
   schema "vessels" do
     field(:name, :string)
     field(:tracking_id, :string)
-    field(:image, :string)
     belongs_to(:fleet, Fleet)
     timestamps()
   end

@@ -9,7 +9,6 @@ defmodule VesseltrackingLive.Fleets do
   alias VesseltrackingLive.Fleets.Fleet
   alias VesseltrackingLive.Fleets.Vessel
   alias VesseltrackingLive.Fleets.Authorization
-  alias VesseltrackingLive.Accounts
 
   @doc """
   Returns the list of fleets.
@@ -36,39 +35,13 @@ defmodule VesseltrackingLive.Fleets do
       ** (Ecto.NoResultsError)
   """
   def get_fleets_by_user!(user_id) do
-    admin? = Accounts.is_admin!(user_id)
-
-    if admin? do
-      Repo.all(from(f in Fleet, preload: [:vessels]))
-    else
-      query =
-        from(
-          f in Fleet,
-          join: aut in Authorization,
-          where: f.id == aut.fleet_id and aut.user_id == ^user_id,
-          preload: [:vessels],
-          preload: [:authorized_users]
-        )
-
-      Repo.all(query)
-    end
-  end
-
-  @doc """
-  Returns the list of fleets for this company.
-
-  ## Examples
-
-      iex> get_fleets_by_company!(1)
-      [%Fleet{}, ...]
-  """
-  def get_fleets_by_company(company_id) do
     query =
       from(
         f in Fleet,
-        where: f.company_id == ^company_id,
-        preload: [:authorized_users],
-        order_by: [asc: :id]
+        join: aut in Authorization,
+        on: f.id == aut.fleet_id and aut.user_id == ^user_id,
+        preload: [:vessels],
+        preload: [:authorized_users]
       )
 
     Repo.all(query)
@@ -143,23 +116,6 @@ defmodule VesseltrackingLive.Fleets do
   """
   def delete_fleet(%Fleet{} = fleet) do
     Repo.delete(fleet)
-  end
-
-  @doc """
-  Deletes all Fleets by company_id.
-
-  ## Examples
-
-      iex> delete_fleets(company_id)
-      {integer()}
-
-      iex> delete_fleets(company_id)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_fleets(company_id) do
-    from(f in Fleet, where: f.company_id == ^company_id)
-    |> Repo.delete_all()
   end
 
   @doc """

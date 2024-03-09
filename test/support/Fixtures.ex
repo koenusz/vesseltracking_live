@@ -1,10 +1,9 @@
 defmodule Support.Fixtures do
-  alias VesseltrackingLive.Accounts
   alias VesseltrackingLive.Fleets
   alias VesseltrackingLive.Track
   alias VesseltrackingLive.Notifications
-  alias VesseltrackingLive.Chat
-  alias VesseltrackingLive.Chat.ChatRoomMember
+
+  alias VesseltrackingLive.AccountsFixtures
 
   @valid_notification_alert %{
     created_on: "2010-04-17T14:00:00Z",
@@ -25,7 +24,7 @@ defmodule Support.Fixtures do
   def valid_notification_message, do: @valid_notification_message
 
   def notification_fixture(attrs \\ %{}) do
-    user = user_fixture()
+    user = AccountsFixtures.user_fixture()
 
     {:ok, notification} =
       attrs
@@ -34,35 +33,6 @@ defmodule Support.Fixtures do
       |> Notifications.create_notification()
 
     notification
-  end
-
-  @valid_user_attrs %{
-    bio: "some bio",
-    image: "some image",
-    password: "some password_hash",
-    username: "some username",
-    administrator: false
-  }
-
-  def user_fixture(attrs \\ %{}) do
-    email = random_string(7) <> "@test.com"
-
-    {:ok, user} =
-      attrs
-      |> Enum.into(%{email: email})
-      |> Enum.into(@valid_user_attrs)
-      |> Accounts.create_user()
-
-    user
-  end
-
-  def admin_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> Enum.into(@valid_user_attrs)
-      |> Accounts.create_admin_user()
-
-    user
   end
 
   @valid_fleet_attrs %{name: "some name"}
@@ -92,7 +62,7 @@ defmodule Support.Fixtures do
   end
 
   def authorization_fixture(attrs \\ %{}) do
-    user = user_fixture()
+    user = AccountsFixtures.user_fixture()
     fleet = fleet_fixture()
 
     {:ok, authorization} =
@@ -115,11 +85,6 @@ defmodule Support.Fixtures do
 
     trail
   end
-
-  @chat_room_attrs %{
-    name: "some name",
-    members: []
-  }
 
   defp into_if_not_present(enum, item) do
     case Enum.member?(enum, item) do

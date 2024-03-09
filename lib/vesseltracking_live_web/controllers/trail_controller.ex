@@ -44,14 +44,14 @@ defmodule VesseltrackingLiveWeb.TrailController do
     render(conn, "index.json", trails: trails)
   end
 
-  def create(conn, %{"trail" => trail_params}) do
-    with {:ok, %Trail{} = trail} <- Track.create_trail(trail_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.trail_path(conn, :show, trail))
-      |> render("show.json", trail: trail)
-    end
-  end
+  # def create(conn, %{"trail" => trail_params}) do
+  #   with {:ok, %Trail{} = trail} <- Track.create_trail(trail_params) do
+  #     conn
+  #     |> put_status(:created)
+  #     |> put_resp_header("location", Routes.trail_path(conn, :show, trail))
+  #     |> render("show.json", trail: trail)
+  #   end
+  # end
 
   def show(conn, %{"id" => id}) do
     trail = Track.get_trail!(id)

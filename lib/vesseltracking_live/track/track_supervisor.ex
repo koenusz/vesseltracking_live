@@ -11,13 +11,13 @@ defmodule VesseltrackingLive.Track.Supervisor do
     Supervisor.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  def init(_) do
-    children = [
-      worker(VesseltrackingLive.Track.Trackworker, [], restart: :temporary)
-    ]
+  # def init(_) do
+  #   children = [
+  #     worker(VesseltrackingLive.Track.Trackworker, [], restart: :temporary)
+  #   ]
 
-    supervise(children, strategy: :simple_one_for_one)
-  end
+  #   supervise(children, strategy: :simple_one_for_one)
+  # end
 
   @doc """
   Registers a new worker, and creates the worker process

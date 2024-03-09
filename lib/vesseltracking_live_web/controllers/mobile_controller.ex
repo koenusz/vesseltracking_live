@@ -3,7 +3,7 @@ defmodule VesseltrackingLiveWeb.MobileController do
 
   def download_mobile_archive(conn, _params) do
     try do
-      Vesseltracking.Mobile.file_stream()
+      VesseltrackingLive.Mobile.file_stream()
       |> Enum.into(
         conn
         |> put_resp_content_type("application/vnd.android.package-archive")
