@@ -8,11 +8,6 @@ defmodule VesseltrackingLiveWeb.FleetController do
     render(conn, "index.json", fleets: fleets)
   end
 
-  def get_fleets_by_company(conn, %{"id" => id}) do
-    fleets = Fleets.get_fleets_by_company(id)
-    render(conn, "index.json", fleets: fleets)
-  end
-
   def index(conn, _params) do
     fleets = Fleets.list_fleets()
     render(conn, "index.json", fleets: fleets)

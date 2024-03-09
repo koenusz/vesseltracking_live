@@ -47,13 +47,11 @@ defmodule Support.Fixtures do
   end
 
   def vessel_fixture(attrs \\ %{}) do
-    fleet = fleet_fixture()
-
     {:ok, vessel} =
       attrs
       |> into_if_not_present(%{
         name: "some name",
-        fleet_id: fleet.id,
+        fleet_id: attrs.fleet.id,
         tracking_id: random_string(15)
       })
       |> Fleets.create_vessel()
@@ -62,12 +60,9 @@ defmodule Support.Fixtures do
   end
 
   def authorization_fixture(attrs \\ %{}) do
-    user = AccountsFixtures.user_fixture()
-    fleet = fleet_fixture()
-
     {:ok, authorization} =
       attrs
-      |> Enum.into(%{user_id: user.id, fleet_id: fleet.id})
+      |> Enum.into(%{user_id: attrs.user_id, fleet_id: attrs.fleet_id})
       |> Fleets.create_authorization()
 
     authorization

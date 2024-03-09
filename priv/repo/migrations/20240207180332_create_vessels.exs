@@ -10,5 +10,6 @@ defmodule Vesseltracking.Repo.Migrations.CreateVessels do
     end
 
     create(index(:vessels, [:fleet_id]))
+    create(unique_index(:vessels, [:tracking_id]))
   end
 end
