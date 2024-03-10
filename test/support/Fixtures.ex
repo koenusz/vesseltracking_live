@@ -69,16 +69,13 @@ defmodule Support.Fixtures do
   end
 
   def trail_fixture(attrs \\ %{}) do
-    {:ok, trail} =
-      attrs
-      |> into_if_not_present(%{
-        day: Date.utc_today(),
-        steps: [],
-        tracking_id: random_string(15)
-      })
-      |> Track.create_trail()
-
-    trail
+    attrs
+    |> into_if_not_present(%{
+      day: Date.utc_today(),
+      steps: [],
+      tracking_id: random_string(15)
+    })
+    |> Track.create_trail()
   end
 
   defp into_if_not_present(enum, item) do

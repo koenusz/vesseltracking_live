@@ -18,7 +18,9 @@ defmodule VesseltrackingLive.Application do
       # Start a worker by calling: VesseltrackingLive.Worker.start_link(arg)
       # {VesseltrackingLive.Worker, arg},
       # Start to serve requests, typically the last entry
-      VesseltrackingLiveWeb.Endpoint
+      VesseltrackingLiveWeb.Endpoint,
+      VesseltrackingLive.Track.Supervisor,
+      {Registry, keys: :unique, name: VesseltrackingLive.Track.TrackRegistry}
       # VesseltrackingLive.DirectIpWorker
     ]
 

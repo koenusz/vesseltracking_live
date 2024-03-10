@@ -81,8 +81,7 @@ defmodule VesseltrackingLive.Track do
   def get_trail!(id), do: Repo.get!(Trail, id) |> Trail.post_process_trail()
 
   def get_trail_from_worker(tracking_id) do
-    {:ok, worker} = get_or_start_worker(tracking_id)
-    Trackworker.get_trail(worker)
+    Trackworker.get_trail(tracking_id)
   end
 
   @doc """
@@ -210,20 +209,6 @@ defmodule VesseltrackingLive.Track do
 
   """
   def add_step(tracking_id, %Step{} = step) do
-    {:ok, worker} = get_or_start_worker(tracking_id)
-    response = Trackworker.add_step(worker, step)
-    Trackworker.store_state(worker)
-    response
-  end
-
-  defp get_or_start_worker(tracking_id) do
-    case TrackSwarm.get_worker(tracking_id) do
-      :undefined ->
-        TrackSwarm.start_worker(tracking_id)
-        {:ok, TrackSwarm.get_worker(tracking_id)}
-
-      worker ->
-        {:ok, worker}
-    end
+    Trackworker.add_step(tracking_id, step)
   end
 end

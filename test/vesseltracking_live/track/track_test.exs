@@ -3,6 +3,7 @@ defmodule VesseltrackingLive.TrackTest do
 
   alias VesseltrackingLive.Track
   alias VesseltrackingLive.Track.Step
+  alias Support.Fixtures
 
   @one_point %Geo.Point{coordinates: {20, 30}}
 
@@ -18,69 +19,54 @@ defmodule VesseltrackingLive.TrackTest do
 
   @invalid_attrs %{day: nil, steps: %{}, tracking_id: nil}
 
-  def trail_fixture(attrs \\ %{}) do
-    {:ok, trail} =
-      attrs
-      |> Enum.into(@valid_attrs)
-      |> Track.create_trail()
+  @step %Step{origin_timestamp: DateTime.utc_now(), point: %Geo.Point{coordinates: {10, 11}}}
 
-    trail
+  setup %{} do
+    {:ok, trail} = Fixtures.trail_fixture(@valid_attrs)
+
+    %{trail: trail}
   end
 
-  describe "swarm" do
-    test "add a point to an existing trail" do
-      trail = trail_fixture()
-      step = %Step{origin_timestamp: DateTime.utc_now(), point: %Geo.Point{coordinates: {10, 11}}}
-
-      Track.add_step(trail.tracking_id, step)
-
+  describe "adding steps" do
+    test "add a point to an existing trail", %{trail: trail} do
+      Track.add_step(trail.tracking_id, @step)
       returned = Track.get_trail_from_worker(trail.tracking_id)
 
       assert trail.tracking_id == returned.tracking_id
       coordinates = Enum.map(returned.steps, fn step -> step["point"].coordinates end)
-      assert coordinates |> Enum.member?(step.point.coordinates)
+      assert coordinates |> Enum.member?(@step.point.coordinates)
     end
 
     test "add a point to a non existing trail" do
-      step = %Step{origin_timestamp: DateTime.utc_now(), point: %Geo.Point{coordinates: {10, 11}}}
-
       tracking_id = "freshly started"
 
-      Track.add_step(tracking_id, step)
+      Track.add_step(tracking_id, @step)
 
       returned = Track.get_trail_from_worker(tracking_id)
 
       assert tracking_id == returned.tracking_id
       coordinates = Enum.map(returned.steps, fn step -> step["point"].coordinates end)
-      assert coordinates |> Enum.member?(step.point.coordinates)
+      assert coordinates |> Enum.member?(@step.point.coordinates)
     end
   end
 
   describe "trails" do
     alias VesseltrackingLive.Track.Trail
 
-    test "list_trails/0 returns all trails" do
-      trail = trail_fixture()
+    test "list_trails/0 returns all trails", %{trail: trail} do
       assert Track.list_trails() == [trail]
     end
 
-    test "get_trail!/1 returns the trail with given id" do
-      trail = trail_fixture()
+    test "get_trail!/1 returns the trail with given id", %{trail: trail} do
       assert Track.get_trail!(trail.id) == trail
     end
 
-    test "get_last_trails_by_tracking_id/2 returns a list of trails" do
-      trail = trail_fixture()
+    test "get_last_trails_by_tracking_id/2 returns a list of trails", %{trail: trail} do
       assert Track.get_last_trails_by_tracking_id(@tracking_id, 1) == [trail]
     end
 
-    test "get_todays_trail/1 returns nil" do
-      assert Track.get_todays_trail(@tracking_id) == nil
-    end
-
-    test "get_todays_trail/1 returns a trail" do
-      trail = trail_fixture(%{day: Date.utc_today()})
-      assert trail = Track.get_todays_trail(@tracking_id)
+    test "get_todays_trail/1 returns a trail", %{trail: trail} do
+      assert trail == Track.get_todays_trail(@tracking_id)
     end
 
     test "create_trail/1 with valid data creates a trail" do
@@ -94,9 +80,7 @@ defmodule VesseltrackingLive.TrackTest do
       assert {:error, %Ecto.Changeset{}} = Track.create_trail(@invalid_attrs)
     end
 
-    test "update_trail/2 with valid data updates the trail" do
-      trail = trail_fixture()
-
+    test "update_trail/2 with valid data updates the trail", %{trail: trail} do
       new_step = %Step{
         origin_timestamp: DateTime.utc_now(),
         point: %Geo.Point{coordinates: {10, 11}}
@@ -115,20 +99,17 @@ defmodule VesseltrackingLive.TrackTest do
       assert trail.tracking_id == "some updated tracking_id"
     end
 
-    test "update_trail/2 with invalid data returns error changeset" do
-      trail = trail_fixture()
+    test "update_trail/2 with invalid data returns error changeset", %{trail: trail} do
       assert {:error, %Ecto.Changeset{}} = Track.update_trail(trail, @invalid_attrs)
       assert trail == Track.get_trail!(trail.id)
     end
 
-    test "delete_trail/1 deletes the trail" do
-      trail = trail_fixture()
+    test "delete_trail/1 deletes the trail", %{trail: trail} do
       assert {:ok, %Trail{}} = Track.delete_trail(trail)
       assert_raise Ecto.NoResultsError, fn -> Track.get_trail!(trail.id) end
     end
 
-    test "change_trail/1 returns a trail changeset" do
-      trail = trail_fixture()
+    test "change_trail/1 returns a trail changeset", %{trail: trail} do
       assert %Ecto.Changeset{} = Track.change_trail(trail)
     end
   end
