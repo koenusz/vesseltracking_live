@@ -6,6 +6,7 @@ defmodule VesseltrackingLiveWeb.AuthorizationControllerTest do
   alias Plug.Conn
 
   import Support.Fixtures
+  import VesseltrackingLive.AccountsFixtures
 
   @update_attrs %{type: "some updated type"}
 

@@ -7,6 +7,7 @@ defmodule VesseltrackingLiveWeb.NotificationControllerTest do
   alias VesseltrackingLiveWeb.NotificationView
 
   import Support.Fixtures
+  import VesseltrackingLive.AccountsFixtures
 
   @create_attrs %{
     created_on: "2010-04-17T14:00:00Z",

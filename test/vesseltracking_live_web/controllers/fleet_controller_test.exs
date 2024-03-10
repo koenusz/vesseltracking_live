@@ -24,13 +24,7 @@ defmodule VesseltrackingLiveWeb.FleetControllerTest do
 
   describe "create fleet" do
     test "renders fleet when data is valid", %{conn: conn} do
-      company = company_fixture()
-
-      input =
-        @create_attrs
-        |> Map.put(:company_id, company.id)
-
-      conn = post(conn, Routes.fleet_path(conn, :create), fleet: input)
+      conn = post(conn, Routes.fleet_path(conn, :create), fleet: @input)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.fleet_path(conn, :show, id))
@@ -39,8 +33,7 @@ defmodule VesseltrackingLiveWeb.FleetControllerTest do
                "vessels" => [],
                "id" => id,
                "name" => "some name",
-               "authorized_users" => [],
-               "companyId" => company.id
+               "authorized_users" => []
              }
     end
 
@@ -66,7 +59,7 @@ defmodule VesseltrackingLiveWeb.FleetControllerTest do
 
     test "renders fleet when data is valid", %{
       conn: conn,
-      fleet: %Fleet{id: id, company_id: company_id} = fleet
+      fleet: %Fleet{id: id} = fleet
     } do
       conn = put(conn, Routes.fleet_path(conn, :update, fleet), fleet: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
@@ -77,8 +70,7 @@ defmodule VesseltrackingLiveWeb.FleetControllerTest do
                "vessels" => [],
                "id" => id,
                "name" => "some updated name",
-               "authorized_users" => [],
-               "companyId" => company_id
+               "authorized_users" => []
              }
     end
 

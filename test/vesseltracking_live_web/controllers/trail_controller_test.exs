@@ -55,7 +55,7 @@ defmodule VesseltrackingLiveWeb.TrailControllerTest do
 
     test "lists all unclaimed trails", %{conn: conn} do
       trail = fixture(:trail)
-      used_trail = trail_fixture()
+      {:ok, used_trail} = trail_fixture()
       vessel_fixture(%{tracking_id: used_trail.tracking_id})
 
       conn = get(conn, Routes.trail_path(conn, :unclaimed_trails))

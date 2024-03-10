@@ -1,5 +1,5 @@
 defmodule VesseltrackingLive.TcpBinaryTest do
-  use VesseltrackingLive.ConnCase
+  use ExUnit.Case, async: true
 
   alias VesseltrackingLive.Track.Trackworker
 

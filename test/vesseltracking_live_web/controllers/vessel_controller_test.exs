@@ -1,5 +1,5 @@
 defmodule VesseltrackingliveWeb.VesselControllerTest do
-  use VesseltrackingliveWeb.ConnCase
+  use VesseltrackingLiveWeb.ConnCase
 
   alias VesseltrackingLive.Fleets
   alias VesseltrackingLive.Fleets.Vessel
