@@ -1,9 +1,5 @@
 defmodule VesseltrackingLive.TcpBinaryTest do
-  use ExUnit.Case, async: true
-
-  alias VesseltrackingLive.Track.Trackworker
-
-  @tracking_id "test_id"
+  use VesseltrackingLive.DataCase, async: false
   @directory ["test", "support", "gtt_testdata"]
   @directip ["Direct IP MsgPack example.sbd"]
 
@@ -12,7 +8,7 @@ defmodule VesseltrackingLive.TcpBinaryTest do
     host = "127.0.0.1" |> String.to_charlist()
 
     # not used but ensures swarm is started
-    _track_worker = start_supervised!({Trackworker, @tracking_id})
+    # _track_supervisor = start_supervised!(VesseltrackingLive.Track.Supervisor)
 
     {:ok, socket} = :gen_tcp.connect(host, port, active: false)
     {:ok, socket: socket}

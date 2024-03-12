@@ -6,11 +6,9 @@ defmodule VesseltrackingLive.Track do
   import Ecto.Query, warn: false
   alias VesseltrackingLive.Repo
 
-  alias VesseltrackingLive.Track.Trail
-  alias VesseltrackingLive.Track.Step
   alias VesseltrackingLive.Fleets.Vessel
   alias VesseltrackingLive.PointAdapter
-  alias VesseltrackingLive.Track.{TrackSwarm, Trackworker}
+  alias VesseltrackingLive.Track.{Step, Trail, Trackworker}
 
   @doc """
   Translate inpot sent to the application to a %Geo.Point{} .

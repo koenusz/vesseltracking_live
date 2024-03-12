@@ -9,7 +9,8 @@ import Config
 
 config :vesseltracking_live,
   ecto_repos: [VesseltrackingLive.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  directIpListenerPort: 9999
 
 # Configures the endpoint
 config :vesseltracking_live, VesseltrackingLiveWeb.Endpoint,

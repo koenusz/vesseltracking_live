@@ -5,8 +5,8 @@ defmodule VesseltrackingLive.DirectIpProtocol do
 
   @behaviour :ranch_protocol
 
-  def start_link(ref, socket, transport, _opts) do
-    pid = :proc_lib.spawn_link(__MODULE__, :init, [ref, socket, transport])
+  def start_link(ref, transport, opts) do
+    pid = :proc_lib.spawn_link(__MODULE__, :init, [ref, transport, opts])
     {:ok, pid}
   end
 
@@ -14,8 +14,8 @@ defmodule VesseltrackingLive.DirectIpProtocol do
     {:ok, args}
   end
 
-  def init(_ref, socket, transport) do
-    # :ok = :ranch.accept_ack(ref)
+  def init(ref, transport, _opts) do
+    {:ok, socket} = :ranch.handshake(ref)
     :ok = transport.setopts(socket, [{:active, true}])
     :gen_server.enter_loop(__MODULE__, [], %{socket: socket, transport: transport})
   end

@@ -1,7 +1,6 @@
 defmodule VesseltrackingLive.Track.Trackworker do
   use GenServer, restart: :temporary
 
-  alias Mix.Tasks.Phx.Gen
   alias VesseltrackingLive.Track
   alias VesseltrackingLive.Track.{Trail, Step}
 
@@ -66,7 +65,7 @@ defmodule VesseltrackingLive.Track.Trackworker do
       |> (fn steps -> [step | steps] end).()
       |> (fn steps -> %{trail | steps: steps} end).()
 
-    GenServer.cast(self(), :store)
+    store(trail)
 
     {:reply, new_trail, new_trail}
   end
@@ -76,11 +75,14 @@ defmodule VesseltrackingLive.Track.Trackworker do
   end
 
   def handle_cast(:store, %VesseltrackingLive.Track.Trail{} = state) do
-    {:ok, trail} =
-      Track.get_todays_trail(state.tracking_id)
-      |> Track.update_trail(%{"steps" => state.steps})
+    {:ok, trail} = store(state)
 
     {:noreply, trail}
+  end
+
+  defp store(state) do
+    Track.get_todays_trail(state.tracking_id)
+    |> Track.update_trail(%{"steps" => state.steps})
   end
 
   defp init_state(tracking_id) do

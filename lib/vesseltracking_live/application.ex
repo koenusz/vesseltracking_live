@@ -20,8 +20,9 @@ defmodule VesseltrackingLive.Application do
       # Start to serve requests, typically the last entry
       VesseltrackingLiveWeb.Endpoint,
       VesseltrackingLive.Track.Supervisor,
-      {Registry, keys: :unique, name: VesseltrackingLive.Track.TrackRegistry}
+      {Registry, keys: :unique, name: VesseltrackingLive.Track.TrackRegistry},
       # VesseltrackingLive.DirectIpWorker
+      VesseltrackingLive.DirectIpSupervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

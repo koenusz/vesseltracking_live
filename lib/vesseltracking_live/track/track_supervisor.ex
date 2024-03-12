@@ -11,10 +11,10 @@ defmodule VesseltrackingLive.Track.Supervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  def start_child(arg) do
+  def start_child(tracking_id) do
     DynamicSupervisor.start_child(
       __MODULE__,
-      {Trackworker, [tracking_id: arg]}
+      {Trackworker, [tracking_id: tracking_id]}
     )
   end
 end
