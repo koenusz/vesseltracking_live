@@ -179,6 +179,24 @@ defmodule VesseltrackingLive.Fleets do
   end
 
   @doc """
+  Returns the vessel for this tracking id.
+
+  ## Examples
+
+  iex> get_vessels_by_tracking_id!(1)
+  %Vessel{}
+  """
+  def get_vessels_by_tracking_id(tracking_id) do
+    query =
+      from(
+        v in Vessel,
+        where: v.tracking_id == ^tracking_id
+      )
+
+    Repo.one(query)
+  end
+
+  @doc """
   Creates a vessel.
 
   ## Examples

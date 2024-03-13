@@ -11,12 +11,18 @@
 <.list>
   <:item title="Day"><%= @trail.day %></:item>
   <:item title="Steps"><%= @trail.steps %></:item>
-  <:item title="Tracking"><%= @trail.tracking_id %></:item>
+  <:item title="Tracking Id"><%= @trail.tracking_id %></:item>
+  <:item :if={@vessel} title="Vessel"><%= @vessel.name %></:item>
 </.list>
 
 <.back navigate={~p"/trails"}>Back to trails</.back>
 
-<.modal :if={@live_action == :edit} id="trail-modal" show on_cancel={JS.patch(~p"/trails/#{@trail}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="trail-modal"
+  show
+  on_cancel={JS.patch(~p"/trails/#{@trail}")}
+>
   <.live_component
     module={VesseltrackingLiveWeb.TrailLive.FormComponent}
     id={@trail.id}

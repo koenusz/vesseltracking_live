@@ -193,8 +193,8 @@ defmodule VesseltrackingLive.Track do
       %Ecto.Changeset{source: %Trail{}}
 
   """
-  def change_trail(%Trail{} = trail) do
-    Trail.changeset(trail, %{})
+  def change_trail(%Trail{} = trail, attrs \\ %{}) do
+    Trail.changeset(trail, attrs)
   end
 
   @doc """
