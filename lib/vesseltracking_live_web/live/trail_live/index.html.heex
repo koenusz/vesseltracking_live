@@ -1,0 +1,43 @@
+<.header>
+  Listing Trails
+  <:actions>
+    <.link patch={~p"/trails/new"}>
+      <.button>New Trail</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="trails"
+  rows={@streams.trails}
+  row_click={fn {_id, trail} -> JS.navigate(~p"/trails/#{trail}") end}
+>
+  <:col :let={{_id, trail}} label="Day"><%= trail.day %></:col>
+  <:col :let={{_id, trail}} label="Steps"><%= trail.steps %></:col>
+  <:col :let={{_id, trail}} label="Tracking"><%= trail.tracking_id %></:col>
+  <:action :let={{_id, trail}}>
+    <div class="sr-only">
+      <.link navigate={~p"/trails/#{trail}"}>Show</.link>
+    </div>
+    <.link patch={~p"/trails/#{trail}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, trail}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: trail.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="trail-modal" show on_cancel={JS.patch(~p"/trails")}>
+  <.live_component
+    module={VesseltrackingLiveWeb.TrailLive.FormComponent}
+    id={@trail.id || :new}
+    title={@page_title}
+    action={@live_action}
+    trail={@trail}
+    patch={~p"/trails"}
+  />
+</.modal>

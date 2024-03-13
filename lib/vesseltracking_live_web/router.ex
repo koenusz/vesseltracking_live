@@ -68,6 +68,28 @@ defmodule VesseltrackingLiveWeb.Router do
       on_mount: [{VesseltrackingLiveWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      live "/fleets", FleetLive.Index, :index
+      live "/fleets/new", FleetLive.Index, :new
+      live "/fleets/:id/edit", FleetLive.Index, :edit
+
+      live "/fleets/:id", FleetLive.Show, :show
+      live "/fleets/:id/show/edit", FleetLive.Show, :edit
+
+      live "/trails", TrailLive.Index, :index
+      live "/trails/new", TrailLive.Index, :new
+      live "/trails/:id/edit", TrailLive.Index, :edit
+
+      live "/trails/:id", TrailLive.Show, :show
+      live "/trails/:id/show/edit", TrailLive.Show, :edit
+
+      live "/vessels", VesselLive.Index, :index
+      live "/vessels/new", VesselLive.Index, :new
+      live "/vessels/:id/edit", VesselLive.Index, :edit
+
+      live "/vessels/:id", VesselLive.Show, :show
+      live "/vessels/:id/show/edit", VesselLive.Show, :edit
+      live "/vessels/:id/fleet/:fleet_id", VesselLive.Show, :fleet
     end
   end
 

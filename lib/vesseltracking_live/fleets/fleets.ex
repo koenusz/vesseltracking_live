@@ -127,8 +127,8 @@ defmodule VesseltrackingLive.Fleets do
       %Ecto.Changeset{source: %Fleet{}}
 
   """
-  def change_fleet(%Fleet{} = fleet) do
-    Fleet.changeset(fleet, %{})
+  def change_fleet(%Fleet{} = fleet, attrs \\ %{}) do
+    Fleet.changeset(fleet, attrs)
   end
 
   @doc """
@@ -239,8 +239,8 @@ defmodule VesseltrackingLive.Fleets do
       %Ecto.Changeset{source: %Vessel{}}
 
   """
-  def change_vessel(%Vessel{} = vessel) do
-    Vessel.changeset(vessel, %{})
+  def change_vessel(%Vessel{} = vessel, attrs \\ %{}) do
+    Vessel.changeset(vessel, attrs)
   end
 
   @doc """
@@ -365,7 +365,7 @@ defmodule VesseltrackingLive.Fleets do
       %Ecto.Changeset{source: %Authorization{}}
 
   """
-  def change_authorization(%Authorization{} = authorization) do
-    Authorization.changeset(authorization, %{})
+  def change_authorization(%Authorization{} = authorization, attrs \\ %{}) do
+    Authorization.changeset(authorization, attrs)
   end
 end

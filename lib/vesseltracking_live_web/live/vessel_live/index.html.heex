@@ -1,0 +1,42 @@
+<.header>
+  Listing Vessels
+  <:actions>
+    <.link patch={~p"/vessels/new"}>
+      <.button>New Vessel</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="vessels"
+  rows={@streams.vessels}
+  row_click={fn {_id, vessel} -> JS.navigate(~p"/vessels/#{vessel}") end}
+>
+  <:col :let={{_id, vessel}} label="Name"><%= vessel.name %></:col>
+  <:col :let={{_id, vessel}} label="Tracking"><%= vessel.tracking_id %></:col>
+  <:action :let={{_id, vessel}}>
+    <div class="sr-only">
+      <.link navigate={~p"/vessels/#{vessel}"}>Show</.link>
+    </div>
+    <.link patch={~p"/vessels/#{vessel}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, vessel}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: vessel.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="vessel-modal" show on_cancel={JS.patch(~p"/vessels")}>
+  <.live_component
+    module={VesseltrackingLiveWeb.VesselLive.FormComponent}
+    id={@vessel.id || :new}
+    title={@page_title}
+    action={@live_action}
+    vessel={@vessel}
+    patch={~p"/vessels"}
+  />
+</.modal>

@@ -1,0 +1,41 @@
+<.header>
+  Listing Fleets
+  <:actions>
+    <.link patch={~p"/fleets/new"}>
+      <.button>New Fleet</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="fleets"
+  rows={@streams.fleets}
+  row_click={fn {_id, fleet} -> JS.navigate(~p"/fleets/#{fleet}") end}
+>
+  <:col :let={{_id, fleet}} label="Name"><%= fleet.name %></:col>
+  <:action :let={{_id, fleet}}>
+    <div class="sr-only">
+      <.link navigate={~p"/fleets/#{fleet}"}>Show</.link>
+    </div>
+    <.link patch={~p"/fleets/#{fleet}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, fleet}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: fleet.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="fleet-modal" show on_cancel={JS.patch(~p"/fleets")}>
+  <.live_component
+    module={VesseltrackingLiveWeb.FleetLive.FormComponent}
+    id={@fleet.id || :new}
+    title={@page_title}
+    action={@live_action}
+    fleet={@fleet}
+    patch={~p"/fleets"}
+  />
+</.modal>
