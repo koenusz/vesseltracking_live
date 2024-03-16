@@ -289,6 +289,20 @@ defmodule VesseltrackingLive.Fleets do
   end
 
   @doc """
+  Returns the list of authorizations that belong to the users in the list.
+
+  ## Examples
+
+      iex> list_authorizations(user_ids)
+      [%Authorization{}, ...]
+
+  """
+  def list_authorizations_by_fleet_id(fleet_id) do
+    from(a in Authorization, where: a.fleet_id == ^fleet_id, preload: [:user])
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single authorization.
 
   Raises `Ecto.NoResultsError` if the Authorization does not exist.
@@ -338,7 +352,11 @@ defmodule VesseltrackingLive.Fleets do
     %Authorization{}
     |> Authorization.changeset(attrs)
     |> Repo.insert()
+    |> preload_user()
   end
+
+  defp preload_user({:ok, authorization}), do: {:ok, Repo.preload(authorization, [:user])}
+  defp preload_user(error), do: error
 
   @doc """
   Updates a authorization.
@@ -356,6 +374,7 @@ defmodule VesseltrackingLive.Fleets do
     authorization
     |> Authorization.changeset(attrs)
     |> Repo.update()
+    |> preload_user()
   end
 
   @doc """

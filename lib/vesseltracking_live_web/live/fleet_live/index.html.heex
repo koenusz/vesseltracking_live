@@ -19,6 +19,11 @@
     </div>
     <.link patch={~p"/fleets/#{fleet}/edit"}>Edit</.link>
   </:action>
+  <:action :let={{_id, fleet}}>
+    <.link navigate={~p"/authorizations/#{fleet.id}"}>
+      Authorizations
+    </.link>
+  </:action>
   <:action :let={{id, fleet}}>
     <.link
       phx-click={JS.push("delete", value: %{id: fleet.id}) |> hide("##{id}")}
@@ -29,7 +34,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="fleet-modal" show on_cancel={JS.patch(~p"/fleets")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="fleet-modal"
+  show
+  on_cancel={JS.patch(~p"/fleets")}
+>
   <.live_component
     module={VesseltrackingLiveWeb.FleetLive.FormComponent}
     id={@fleet.id || :new}

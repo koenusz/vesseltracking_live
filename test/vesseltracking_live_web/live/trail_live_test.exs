@@ -2,7 +2,7 @@ defmodule VesseltrackingLiveWeb.TrailLiveTest do
   use VesseltrackingLiveWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import VesseltrackingLive.TrackFixtures
+  import Support.Fixtures
 
   @create_attrs %{day: "2024-03-12", steps: [], tracking_id: "some tracking_id"}
   @update_attrs %{day: "2024-03-13", steps: [], tracking_id: "some updated tracking_id"}

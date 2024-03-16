@@ -5,7 +5,7 @@ defmodule VesseltrackingLive.FleetsTest do
   alias VesseltrackingLive.Fleets
 
   import Support.Fixtures
-  import VesseltrackingLive.AccountsFixtures
+  import VesseltrackingLive.TestHelpers
 
   setup %{} do
     user = AccountsFixtures.user_fixture()
@@ -146,7 +146,10 @@ defmodule VesseltrackingLive.FleetsTest do
     @invalid_attrs %{type: 1}
 
     test "list_authorizations/0 returns all authorizations", %{authorization: authorization} do
-      assert Fleets.list_authorizations() == [authorization]
+      [result] = Fleets.list_authorizations()
+
+      {result, aut} = remove_not_loaded_associations(authorization, result)
+      assert result == aut
     end
 
     test "list_authorizations_by_user_ids/0 returns all authorizations", %{
@@ -173,7 +176,10 @@ defmodule VesseltrackingLive.FleetsTest do
     test "get_authorization!/1 returns the authorization with given id", %{
       authorization: authorization
     } do
-      assert Fleets.get_authorization!(authorization.id) == authorization
+      result = Fleets.get_authorization!(authorization.id)
+      {result, aut} = remove_not_loaded_associations(authorization, result)
+
+      assert result == aut
     end
 
     test "create_authorization/1 with invalid data returns error changeset" do
@@ -194,7 +200,9 @@ defmodule VesseltrackingLive.FleetsTest do
       assert {:error, %Ecto.Changeset{}} =
                Fleets.update_authorization(authorization, @invalid_attrs)
 
-      assert authorization == Fleets.get_authorization!(authorization.id)
+      result = Fleets.get_authorization!(authorization.id)
+      {result, aut} = remove_not_loaded_associations(authorization, result)
+      assert result == aut
     end
 
     test "delete_authorization/1 deletes the authorization", %{

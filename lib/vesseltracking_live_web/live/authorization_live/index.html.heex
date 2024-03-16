@@ -1,0 +1,42 @@
+<.header>
+  Listing Authorizations
+  <:actions>
+    <.link patch={~p"/authorizations/#{@fleet.id}/new"}>
+      <.button>New Authorization</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="authorizations" rows={@streams.authorizations}>
+  <:col :let={{_id, authorization}} label="Users">
+    <%= authorization.user.email %>
+  </:col>
+
+  <:action :let={{id, authorization}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: authorization.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.back navigate={~p"/fleets/#{@fleet.id}"}>Back to fleet: <%= @fleet.name %></.back>
+
+<.modal
+  :if={@live_action in [:new]}
+  id="authorization-modal"
+  show
+  on_cancel={JS.patch(~p"/authorizations/#{@fleet.id}")}
+>
+  <.live_component
+    module={VesseltrackingLiveWeb.AuthorizationLive.FormComponent}
+    id={@authorization.id || :new}
+    title={@page_title}
+    action={@live_action}
+    authorization={@authorization}
+    users={@users}
+    patch={~p"/authorizations/#{@fleet.id}"}
+  />
+</.modal>

@@ -90,6 +90,13 @@ defmodule VesseltrackingLiveWeb.Router do
       live "/vessels/:id", VesselLive.Show, :show
       live "/vessels/:id/show/edit", VesselLive.Show, :edit
       live "/vessels/:id/fleet/:fleet_id", VesselLive.Show, :fleet
+
+      live "/authorizations/:fleet_id", AuthorizationLive.Index, :index
+      live "/authorizations/:fleet_id/new", AuthorizationLive.Index, :new
+      # live "/authorizations/:id/edit", AuthorizationLive.Index, :edit
+
+      # live "/authorizations/:id/show", AuthorizationLive.Show, :show
+      # live "/authorizations/:id/show/edit", AuthorizationLive.Show, :edit
     end
   end
 

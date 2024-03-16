@@ -2,6 +2,11 @@
   Fleet <%= @fleet.id %>
   <:subtitle>This is a fleet record from your database.</:subtitle>
   <:actions>
+    <.link patch={~p"/authorizations/#{@fleet.id}"} phx-click={JS.push_focus()}>
+      <.button>Edit authorizations</.button>
+    </.link>
+  </:actions>
+  <:actions>
     <.link patch={~p"/fleets/#{@fleet}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit fleet</.button>
     </.link>
@@ -20,6 +25,7 @@
   >
     <:col :let={vessel} label="Name"><%= vessel.name %></:col>
     <:col :let={vessel} label="Tracking Id"><%= vessel.tracking_id %></:col>
+
     <:action :let={vessel}>
       <div class="sr-only">
         <.link navigate={~p"/vessels/#{vessel}/fleet/#{@fleet.id}"}>Show</.link>
