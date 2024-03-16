@@ -6,6 +6,15 @@ defmodule VesseltrackingLive.AccountsTest do
   import VesseltrackingLive.AccountsFixtures
   alias VesseltrackingLive.Accounts.{User, UserToken}
 
+  describe "list_users/0" do
+    test "should return all users" do
+      user1 = user_fixture()
+      user2 = user_fixture()
+
+      assert Accounts.list_users() == [user1, user2]
+    end
+  end
+
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
       refute Accounts.get_user_by_email("unknown@example.com")
