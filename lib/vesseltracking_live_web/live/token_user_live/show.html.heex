@@ -1,0 +1,31 @@
+<.header>
+  Token user <%= @token_user.id %>
+  <:subtitle>This is a token_user record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/token_users/#{@token_user}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit token_user</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Username"><%= @token_user.username %></:item>
+  <:item title="Pubkey"><%= @token_user.pubkey %></:item>
+  <:item title="Approved?"><%= @token_user.approved? %></:item>
+  <:item title="Created at"><%= @token_user.created_at %></:item>
+  <:item title="Expires at"><%= @token_user.expires_at %></:item>
+  <:item title="Comment"><%= @token_user.comment %></:item>
+</.list>
+
+<.back navigate={~p"/token_users"}>Back to token_users</.back>
+
+<.modal :if={@live_action == :edit} id="token_user-modal" show on_cancel={JS.patch(~p"/token_users/#{@token_user}")}>
+  <.live_component
+    module={VesseltrackingLiveWeb.TokenUserLive.FormComponent}
+    id={@token_user.id}
+    title={@page_title}
+    action={@live_action}
+    token_user={@token_user}
+    patch={~p"/token_users/#{@token_user}"}
+  />
+</.modal>

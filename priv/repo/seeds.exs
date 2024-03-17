@@ -36,3 +36,20 @@ VesseltrackingLive.Repo.insert!(%Vessel{
   %{email: "user#{System.unique_integer()}@example.com", password: "password1234"}
   |> VesseltrackingLive.Accounts.register_user()
 end)
+
+alias VesseltrackingLive.Certificate.TokenUser
+
+1..4
+|> Enum.each(fn _ ->
+  pub = TokenUser.generate_private_key(1024) |> TokenUser.pem_encoded_public_key()
+
+  %{
+    approved?: true,
+    comment: "some comment",
+    created_at: ~U[2024-03-16 10:04:00Z],
+    expires_at: ~U[2024-03-16 10:04:00Z],
+    pubkey: pub,
+    username: "some username"
+  }
+  |> VesseltrackingLive.Certificate.create_token_user()
+end)

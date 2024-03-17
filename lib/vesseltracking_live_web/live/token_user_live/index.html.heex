@@ -1,0 +1,48 @@
+<.header>
+  Listing Token users
+</.header>
+
+<.table
+  id="token_users"
+  rows={@streams.token_users}
+  row_click={fn {_id, token_user} -> JS.navigate(~p"/token_users/#{token_user}") end}
+>
+  <:col :let={{_id, token_user}} label="Username"><%= token_user.username %></:col>
+  <:col :let={{_id, token_user}} label="Pubkey">
+    <div class="max-w-64 overflow-hidden"><%= token_user.pubkey %></div>
+  </:col>
+  <:col :let={{_id, token_user}} label="Approved?"><%= token_user.approved? %></:col>
+  <:col :let={{_id, token_user}} label="Created at"><%= token_user.created_at %></:col>
+  <:col :let={{_id, token_user}} label="Expires at"><%= token_user.expires_at %></:col>
+  <:col :let={{_id, token_user}} label="Comment"><%= token_user.comment %></:col>
+  <:action :let={{_id, token_user}}>
+    <div class="sr-only">
+      <.link navigate={~p"/token_users/#{token_user}"}>Show</.link>
+    </div>
+    <.link patch={~p"/token_users/#{token_user}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, token_user}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: token_user.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="token_user-modal"
+  show
+  on_cancel={JS.patch(~p"/token_users")}
+>
+  <.live_component
+    module={VesseltrackingLiveWeb.TokenUserLive.FormComponent}
+    id={@token_user.id || :new}
+    title={@page_title}
+    action={@live_action}
+    token_user={@token_user}
+    patch={~p"/token_users"}
+  />
+</.modal>
