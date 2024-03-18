@@ -2,32 +2,24 @@ defmodule VesseltrackingLiveWeb.TokenUserLiveTest do
   use VesseltrackingLiveWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import VesseltrackingLive.CertificateFixtures
+  import VesseltrackingLive.{CertificateFixtures, AccountsFixtures}
 
-  @create_attrs %{
-    comment: "some comment",
-    username: "some username",
-    pubkey: "some pubkey",
-    approved?: true,
-    created_at: "2024-03-16T11:48:00Z",
-    expires_at: "2024-03-16T11:48:00Z"
-  }
   @update_attrs %{
     comment: "some updated comment",
-    username: "some updated username",
-    pubkey: "some updated pubkey",
-    approved?: false,
-    created_at: "2024-03-17T11:48:00Z",
-    expires_at: "2024-03-17T11:48:00Z"
+    approved?: false
   }
   @invalid_attrs %{
     comment: nil,
-    username: nil,
-    pubkey: nil,
-    approved?: false,
-    created_at: nil,
-    expires_at: nil
+    approved?: false
   }
+
+  setup_all %{conn: conn} do
+    conn =
+      conn
+      |> log_in_user(user_fixture())
+
+    %{conn: conn}
+  end
 
   defp create_token_user(_) do
     token_user = token_user_fixture()

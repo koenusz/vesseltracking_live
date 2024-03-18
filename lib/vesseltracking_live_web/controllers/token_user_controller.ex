@@ -2,49 +2,51 @@ defmodule VesseltrackingLiveWeb.TokenUserController do
   use VesseltrackingLiveWeb, :controller
 
   alias VesseltrackingLive.Certificate
-  alias VesseltrackingLive.Certificate.TokenUser
+  alias VesseltrackingLive.Certificate.{TokenUser, ChallengeAgent}
 
   action_fallback VesseltrackingLiveWeb.FallbackController
 
-  def request_access(params) do
-  end
+  def request_access(conn, %{user_name: user_name, pub_key: pub_key, signature: signature}) do
+    if :public_key.verify(pub_key, :sha256, signature, pub_key) do
+      %{
+        comment: "",
+        username: user_name,
+        pubkey: pub_key,
+        approved?: false,
+        created_at: DateTime.utc_now(),
+        expires_at: DateTime.utc_now() |> DateTime.add(365, :day)
+      }
+      |> Certificate.create_token_user()
 
-  def login(params) do
-  end
-
-  def index(conn, _params) do
-    token_users = Certificate.list_token_users()
-    render(conn, :index, token_users: token_users)
-  end
-
-  def create(conn, %{"token_user" => token_user_params}) do
-    with {:ok, %TokenUser{} = token_user} <- Certificate.create_token_user(token_user_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/token_users/#{token_user}")
-      |> render(:show, token_user: token_user)
+      send_resp(conn, 200, "")
     end
+
+    send_resp(conn, 401, "")
   end
 
-  def show(conn, %{"id" => id}) do
-    token_user = Certificate.get_token_user!(id)
-    render(conn, :show, token_user: token_user)
+  def login(conn, %{token_user_id: token_user_id}) do
+    pub_key =
+      Certificate.get_token_user!(token_user_id).pub_key
+      |> :public_key.pem_decode()
+
+    random = :crypto.strong_rand_bytes(8)
+
+    ChallengeAgent.start_link(%{token_user_id: token_user_id, random: random})
+
+    challenge =
+      random
+      |> :public_key.encrypt_public(pub_key)
+
+    send_resp(conn, 200, challenge)
   end
 
-  def update(conn, %{"id" => id, "token_user" => token_user_params}) do
-    token_user = Certificate.get_token_user!(id)
+  def challenge(conn, %{token_user_id: token_user_id, decrypted: decrypted}) do
+    if(ChallengeAgent.challenge(token_user_id, decrypted)) do
+      # create a proper login token
 
-    with {:ok, %TokenUser{} = token_user} <-
-           Certificate.update_token_user(token_user, token_user_params) do
-      render(conn, :show, token_user: token_user)
+      send_resp(conn, 200, "login_token")
     end
-  end
 
-  def delete(conn, %{"id" => id}) do
-    token_user = Certificate.get_token_user!(id)
-
-    with {:ok, %TokenUser{}} <- Certificate.delete_token_user(token_user) do
-      send_resp(conn, :no_content, "")
-    end
+    send_resp(conn, 401, "")
   end
 end

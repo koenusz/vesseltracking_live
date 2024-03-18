@@ -9,7 +9,7 @@
 >
   <:col :let={{_id, token_user}} label="Username"><%= token_user.username %></:col>
   <:col :let={{_id, token_user}} label="Pubkey">
-    <div class="max-w-64 overflow-hidden"><%= token_user.pubkey %></div>
+    <div class="max-w-64 max-h-12 overflow-hidden"><%= token_user.pubkey %></div>
   </:col>
   <:col :let={{_id, token_user}} label="Approved?"><%= token_user.approved? %></:col>
   <:col :let={{_id, token_user}} label="Created at"><%= token_user.created_at %></:col>
