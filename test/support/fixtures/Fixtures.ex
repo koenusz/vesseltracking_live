@@ -1,6 +1,4 @@
 defmodule Support.Fixtures do
-  alias VesseltrackingLive.Fleets
-  alias VesseltrackingLive.Track
   alias VesseltrackingLive.Notifications
 
   alias VesseltrackingLive.AccountsFixtures
@@ -35,47 +33,10 @@ defmodule Support.Fixtures do
     notification
   end
 
-  @valid_fleet_attrs %{name: "some name"}
-
-  def fleet_fixture(attrs \\ %{}) do
-    {:ok, fleet} =
-      attrs
-      |> Enum.into(@valid_fleet_attrs)
-      |> Fleets.create_fleet()
-
-    fleet
-  end
-
-  def vessel_fixture(attrs \\ %{}) do
-    {:ok, vessel} =
-      attrs
-      |> into_if_not_present(%{
-        name: "some name",
-        fleet_id: attrs.fleet.id,
-        tracking_id: random_string(15)
-      })
-      |> Fleets.create_vessel()
-
-    vessel
-  end
-
-  def authorization_fixture(attrs \\ %{}) do
-    {:ok, authorization} =
-      attrs
-      |> Enum.into(%{user_id: attrs.user_id, fleet_id: attrs.fleet_id})
-      |> Fleets.create_authorization()
-
-    authorization
-  end
-
   defp into_if_not_present(enum, item) do
     case Enum.member?(enum, item) do
       true -> enum
       false -> Enum.into(enum, item)
     end
-  end
-
-  defp random_string(size) do
-    :crypto.strong_rand_bytes(size) |> Base.url_encode64() |> binary_part(0, size)
   end
 end

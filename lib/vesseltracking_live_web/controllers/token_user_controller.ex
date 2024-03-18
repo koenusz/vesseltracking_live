@@ -2,7 +2,7 @@ defmodule VesseltrackingLiveWeb.TokenUserController do
   use VesseltrackingLiveWeb, :controller
 
   alias VesseltrackingLive.Certificate
-  alias VesseltrackingLive.Certificate.{TokenUser, ChallengeAgent}
+  alias VesseltrackingLive.ChallengeAgent
 
   action_fallback VesseltrackingLiveWeb.FallbackController
 

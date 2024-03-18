@@ -4,7 +4,7 @@ defmodule VesseltrackingLive.Certificate do
   """
 
   import Ecto.Query, warn: false
-  alias ElixirSense.Core.Struct
+
   alias VesseltrackingLive.Repo
 
   alias VesseltrackingLive.Certificate.TokenUser

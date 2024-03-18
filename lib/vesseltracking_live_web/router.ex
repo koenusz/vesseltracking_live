@@ -27,6 +27,10 @@ defmodule VesseltrackingLiveWeb.Router do
     pipe_through [:api]
 
     get "/trails/last/:tracking_id/:days", TrackController, :last_trails
+
+    get "/vessels/:id", VesselController, :show
+
+    get "/fleets/:user_id", FleetController, :fleets_by_user
   end
 
   # Other scopes may use custom stacks.

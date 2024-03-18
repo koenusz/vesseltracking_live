@@ -159,6 +159,7 @@ defmodule VesseltrackingLive.Fleets do
 
   """
   def get_vessel!(id), do: Repo.get!(Vessel, id)
+  def get_vessel(id), do: Repo.get(Vessel, id)
 
   @doc """
   Returns the list of vessels for this fleet.
