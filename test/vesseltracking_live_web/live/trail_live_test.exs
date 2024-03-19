@@ -2,11 +2,18 @@ defmodule VesseltrackingLiveWeb.TrailLiveTest do
   use VesseltrackingLiveWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Support.Fixtures
+  import VesseltrackingLive.TrackFixtures
+  import VesseltrackingLive.AccountsFixtures
 
   @create_attrs %{day: "2024-03-12", steps: [], tracking_id: "some tracking_id"}
   @update_attrs %{day: "2024-03-13", steps: [], tracking_id: "some updated tracking_id"}
   @invalid_attrs %{day: nil, steps: [], tracking_id: nil}
+
+  setup %{conn: conn} do
+    user = user_fixture()
+
+    {:ok, conn: put_req_header(conn, "accept", "application/json"), user: user}
+  end
 
   defp create_trail(_) do
     trail = trail_fixture()

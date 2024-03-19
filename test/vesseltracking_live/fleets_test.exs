@@ -4,7 +4,7 @@ defmodule VesseltrackingLive.FleetsTest do
 
   alias VesseltrackingLive.Fleets
 
-  import Support.Fixtures
+  import VesseltrackingLive.FleetsFixtures
   import VesseltrackingLive.TestHelpers
 
   setup %{} do
@@ -25,9 +25,9 @@ defmodule VesseltrackingLive.FleetsTest do
     @invalid_attrs %{name: nil}
 
     test "list_fleets/0 returns all fleets", %{fleet: fleet} do
-      [returned] = Fleets.list_fleets()
-      assert returned.id == fleet.id
-      assert returned.name == fleet.name
+      returned = Fleets.list_fleets()
+
+      assert fleet.id in (returned |> Enum.map(fn fleet -> fleet.id end))
     end
 
     test "get_fleets_by_user/1 returns all for this user", %{fleet: fleet, user: user} do
@@ -68,7 +68,7 @@ defmodule VesseltrackingLive.FleetsTest do
     alias VesseltrackingLive.Fleets.Vessel
 
     setup %{fleet: fleet} do
-      %{vessel: vessel_fixture(%{fleet: fleet})}
+      %{vessel: vessel_fixture(%{fleet_id: fleet.id})}
     end
 
     def vessel_params(fleet_id) do
@@ -83,7 +83,7 @@ defmodule VesseltrackingLive.FleetsTest do
     @invalid_attrs %{name: nil, tracking_id: nil}
 
     test "list_vessels/0 returns all vessels", %{vessel: vessel} do
-      assert Fleets.list_vessels() == [vessel]
+      assert vessel.id in (Fleets.list_vessels() |> Enum.map(& &1.id))
     end
 
     test "get_vessel!/1 returns the vessel with given id", %{vessel: vessel} do

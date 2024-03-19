@@ -4,7 +4,7 @@ defmodule VesseltrackingLive.TcpBinaryTest do
   @directip ["Direct IP MsgPack example.sbd"]
 
   setup do
-    port = 9999
+    port = 9998
     host = "127.0.0.1" |> String.to_charlist()
 
     # not used but ensures swarm is started

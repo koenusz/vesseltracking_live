@@ -2,7 +2,7 @@ defmodule VesseltrackingLiveWeb.FleetLiveTest do
   use VesseltrackingLiveWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Support.Fixtures
+  import VesseltrackingLive.FleetsFixtures
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
