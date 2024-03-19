@@ -3,7 +3,7 @@ defmodule VesseltrackingLive.TrackTest do
 
   alias VesseltrackingLive.Track
   alias VesseltrackingLive.Track.Step
-  alias Support.Fixtures
+  import VesseltrackingLive.TrackFixtures
 
   @one_point %Geo.Point{coordinates: {20, 30}}
 
@@ -22,7 +22,7 @@ defmodule VesseltrackingLive.TrackTest do
   @step %Step{origin_timestamp: DateTime.utc_now(), point: %Geo.Point{coordinates: {10, 11}}}
 
   setup %{} do
-    {:ok, trail} = Fixtures.trail_fixture(@valid_attrs)
+    {:ok, trail} = trail_fixture(@valid_attrs)
 
     %{trail: trail}
   end
