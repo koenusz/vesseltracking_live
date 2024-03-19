@@ -22,8 +22,6 @@ defmodule VesseltrackingLive.TrackTest do
 
   @step %Step{origin_timestamp: DateTime.utc_now(), point: %Geo.Point{coordinates: {10, 11}}}
 
-  setup conn, do: register_and_log_in_user(conn)
-
   setup %{} do
     {:ok, trail} = trail_fixture(@valid_attrs)
 

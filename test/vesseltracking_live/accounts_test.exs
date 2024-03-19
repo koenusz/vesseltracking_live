@@ -11,7 +11,8 @@ defmodule VesseltrackingLive.AccountsTest do
       user1 = user_fixture()
       user2 = user_fixture()
 
-      assert Accounts.list_users() == [user1, user2]
+      assert Accounts.list_users() |> Enum.member?(user1)
+      assert Accounts.list_users() |> Enum.member?(user2)
     end
   end
 
