@@ -8,8 +8,14 @@ defmodule VesseltrackingLiveWeb.VesselLiveTest do
   @update_attrs %{name: "some updated name", tracking_id: "some updated tracking_id"}
   @invalid_attrs %{name: nil, tracking_id: nil}
 
-  defp create_vessel(_) do
-    vessel = vessel_fixture()
+  setup conn, do: register_and_log_in_user(conn)
+
+  setup %{} do
+    %{fleet: fleet_fixture()}
+  end
+
+  defp create_vessel(%{fleet: fleet}) do
+    vessel = vessel_fixture(fleet_id: fleet.id)
     %{vessel: vessel}
   end
 
