@@ -3,10 +3,13 @@ defmodule VesseltrackingLiveWeb.FleetLiveTest do
 
   import Phoenix.LiveViewTest
   import VesseltrackingLive.FleetsFixtures
+  import VesseltrackingLive.AccountsFixtures
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
+
+  setup conn, do: register_and_log_in_user(conn)
 
   defp create_fleet(_) do
     fleet = fleet_fixture()

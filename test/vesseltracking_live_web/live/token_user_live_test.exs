@@ -13,13 +13,7 @@ defmodule VesseltrackingLiveWeb.TokenUserLiveTest do
     approved?: false
   }
 
-  setup_all %{conn: conn} do
-    conn =
-      conn
-      |> log_in_user(user_fixture())
-
-    %{conn: conn}
-  end
+  setup conn, do: register_and_log_in_user(conn)
 
   defp create_token_user(_) do
     token_user = token_user_fixture()

@@ -4,6 +4,7 @@ defmodule VesseltrackingLive.TrackTest do
   alias VesseltrackingLive.Track
   alias VesseltrackingLive.Track.Step
   import VesseltrackingLive.TrackFixtures
+  import VesseltrackingLive.AccountsFixtures
 
   @one_point %Geo.Point{coordinates: {20, 30}}
 
@@ -20,6 +21,8 @@ defmodule VesseltrackingLive.TrackTest do
   @invalid_attrs %{day: nil, steps: %{}, tracking_id: nil}
 
   @step %Step{origin_timestamp: DateTime.utc_now(), point: %Geo.Point{coordinates: {10, 11}}}
+
+  setup conn, do: register_and_log_in_user(conn)
 
   setup %{} do
     {:ok, trail} = trail_fixture(@valid_attrs)
