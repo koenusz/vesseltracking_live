@@ -21,7 +21,14 @@ defmodule VesseltrackingLiveWeb.TokenUserControllerTest do
     created_at: ~U[2024-03-17 10:04:00Z],
     expires_at: ~U[2024-03-17 10:04:00Z]
   }
-  @invalid_attrs %{comment: nil, username: nil, pubkey: nil, approved?: nil, created_at: nil, expires_at: nil}
+  @invalid_attrs %{
+    comment: nil,
+    username: nil,
+    pubkey: nil,
+    approved?: nil,
+    created_at: nil,
+    expires_at: nil
+  }
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -35,7 +42,7 @@ defmodule VesseltrackingLiveWeb.TokenUserControllerTest do
   end
 
   describe "create token_user" do
-    test "renders token_user when data is valid", %{conn: conn} do
+    ke test "renders token_user when data is valid", %{conn: conn} do
       conn = post(conn, ~p"/api/token_users", token_user: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
@@ -61,7 +68,10 @@ defmodule VesseltrackingLiveWeb.TokenUserControllerTest do
   describe "update token_user" do
     setup [:create_token_user]
 
-    test "renders token_user when data is valid", %{conn: conn, token_user: %TokenUser{id: id} = token_user} do
+    test "renders token_user when data is valid", %{
+      conn: conn,
+      token_user: %TokenUser{id: id} = token_user
+    } do
       conn = put(conn, ~p"/api/token_users/#{token_user}", token_user: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

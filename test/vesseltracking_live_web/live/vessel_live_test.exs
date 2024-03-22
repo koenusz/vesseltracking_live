@@ -29,7 +29,7 @@ defmodule VesseltrackingLiveWeb.VesselLiveTest do
       assert html =~ vessel.name
     end
 
-    test "saves new vessel", %{conn: conn} do
+    test "saves new vessel", %{conn: conn, fleet: fleet} do
       {:ok, index_live, _html} = live(conn, ~p"/vessels")
 
       assert index_live |> element("a", "New Vessel") |> render_click() =~
