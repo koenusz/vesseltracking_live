@@ -42,7 +42,7 @@ defmodule VesseltrackingLiveWeb.TokenUserControllerTest do
   end
 
   describe "create token_user" do
-    ke test "renders token_user when data is valid", %{conn: conn} do
+    test "renders token_user when data is valid", %{conn: conn} do
       conn = post(conn, ~p"/api/token_users", token_user: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
@@ -101,9 +101,9 @@ defmodule VesseltrackingLiveWeb.TokenUserControllerTest do
       conn = delete(conn, ~p"/api/token_users/#{token_user}")
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, ~p"/api/token_users/#{token_user}")
-      end
+      end)
     end
   end
 

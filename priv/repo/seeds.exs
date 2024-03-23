@@ -9,27 +9,22 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias VesseltrackingLive.Fleets
 alias VesseltrackingLive.Fleets.{Fleet, Vessel}
+alias VesseltrackingLive.Track
+alias VesseltrackingLive.Track.Step
 
 fleet = VesseltrackingLive.Repo.insert!(%Fleet{name: "testfleet"})
 
-VesseltrackingLive.Repo.insert!(%Vessel{
-  name: "test vessel 1",
-  tracking_id: "#{System.unique_integer()}",
-  fleet_id: fleet.id
-})
-
-VesseltrackingLive.Repo.insert!(%Vessel{
-  name: "test vessel 2",
-  tracking_id: "#{System.unique_integer()}",
-  fleet_id: fleet.id
-})
-
-VesseltrackingLive.Repo.insert!(%Vessel{
-  name: "test vessel 3",
-  tracking_id: "#{System.unique_integer()}",
-  fleet_id: fleet.id
-})
+1..3
+|> Enum.each(fn i ->
+  %{
+    name: "test vessel #{i}",
+    tracking_id: :crypto.strong_rand_bytes(8) |> Base.url_encode64(),
+    fleet_id: fleet.id
+  }
+  |> Fleets.create_vessel()
+end)
 
 1..4
 |> Enum.each(fn _ ->
@@ -52,4 +47,18 @@ alias VesseltrackingLive.Certificate.TokenUser
     username: "some username"
   }
   |> VesseltrackingLive.Certificate.create_token_user()
+end)
+
+step1 = %Geo.Point{coordinates: {20, 30}} |> Step.from_point()
+step2 = %Geo.Point{coordinates: {20, 31}} |> Step.from_point()
+step3 = %Geo.Point{coordinates: {20, 32}} |> Step.from_point()
+
+1..20
+|> Enum.each(fn _ ->
+  %{
+    day: Date.utc_today(),
+    steps: [step1, step2, step3],
+    tracking_id: :crypto.strong_rand_bytes(8) |> Base.url_encode64()
+  }
+  |> Track.create_trail()
 end)

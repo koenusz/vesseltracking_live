@@ -20,7 +20,13 @@ defmodule VesseltrackingLiveWeb.VesselLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:tracking_id]} type="text" label="Tracking" />
+        <.input
+          field={@form[:tracking_id]}
+          type="select"
+          options={@tracking_id_options}
+          label="Tracking"
+        />
+        <.input field={@form[:fleet_id]} type="select" options={@fleet_options} label="Fleet" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Vessel</.button>
         </:actions>

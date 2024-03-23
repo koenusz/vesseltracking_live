@@ -7,6 +7,8 @@
   </:actions>
 </.header>
 
+<.back navigate={~p"/fleets"}>Back to fleets</.back>
+
 <.table
   id="vessels"
   rows={@streams.vessels}
@@ -30,10 +32,17 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="vessel-modal" show on_cancel={JS.patch(~p"/vessels")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="vessel-modal"
+  show
+  on_cancel={JS.patch(~p"/vessels")}
+>
   <.live_component
     module={VesseltrackingLiveWeb.VesselLive.FormComponent}
     id={@vessel.id || :new}
+    fleet_options={@fleet_options}
+    tracking_id_options={@tracking_id_options}
     title={@page_title}
     action={@live_action}
     vessel={@vessel}

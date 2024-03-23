@@ -94,6 +94,7 @@ defmodule VesseltrackingLiveWeb.Router do
       live "/trails/:id/show/edit", TrailLive.Show, :edit
 
       live "/vessels", VesselLive.Index, :index
+      live "/vessels/new/:fleet_id", VesselLive.Index, :new
       live "/vessels/new", VesselLive.Index, :new
       live "/vessels/:id/edit", VesselLive.Index, :edit
 
