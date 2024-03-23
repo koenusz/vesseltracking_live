@@ -3,6 +3,7 @@ defmodule VesseltrackingLiveWeb.VesselLiveTest do
 
   import Phoenix.LiveViewTest
   import VesseltrackingLive.FleetsFixtures
+  import VesseltrackingLive.TrackFixtures
 
   @create_attrs %{name: "some name", tracking_id: "some tracking_id"}
   @update_attrs %{name: "some updated name", tracking_id: "some updated tracking_id"}
@@ -11,7 +12,13 @@ defmodule VesseltrackingLiveWeb.VesselLiveTest do
   setup conn, do: register_and_log_in_user(conn)
 
   setup %{} do
-    %{fleet: fleet_fixture()}
+    %{
+      fleet: fleet_fixture(),
+      trails: [
+        trail_fixture(%{tracking_id: "some tracking_id"}),
+        trail_fixture(%{tracking_id: "some updated tracking_id"})
+      ]
+    }
   end
 
   defp create_vessel(%{fleet: fleet}) do
@@ -37,9 +44,14 @@ defmodule VesseltrackingLiveWeb.VesselLiveTest do
 
       assert_patch(index_live, ~p"/vessels/new")
 
-      assert index_live
-             |> form("#vessel-form", vessel: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+      assert_raise(
+        ArgumentError,
+        fn ->
+          index_live
+          |> form("#vessel-form", vessel: @invalid_attrs)
+          |> render_change()
+        end
+      )
 
       assert index_live
              |> form("#vessel-form", vessel: @create_attrs)
@@ -60,9 +72,14 @@ defmodule VesseltrackingLiveWeb.VesselLiveTest do
 
       assert_patch(index_live, ~p"/vessels/#{vessel}/edit")
 
-      assert index_live
-             |> form("#vessel-form", vessel: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+      assert_raise(
+        ArgumentError,
+        fn ->
+          index_live
+          |> form("#vessel-form", vessel: @invalid_attrs)
+          |> render_change()
+        end
+      )
 
       assert index_live
              |> form("#vessel-form", vessel: @update_attrs)
@@ -101,9 +118,14 @@ defmodule VesseltrackingLiveWeb.VesselLiveTest do
 
       assert_patch(show_live, ~p"/vessels/#{vessel}/show/edit")
 
-      assert show_live
-             |> form("#vessel-form", vessel: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+      assert_raise(
+        ArgumentError,
+        fn ->
+          show_live
+          |> form("#vessel-form", vessel: @invalid_attrs)
+          |> render_change()
+        end
+      )
 
       assert show_live
              |> form("#vessel-form", vessel: @update_attrs)

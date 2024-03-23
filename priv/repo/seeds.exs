@@ -14,12 +14,19 @@ alias VesseltrackingLive.Fleets.{Fleet, Vessel}
 alias VesseltrackingLive.Track
 alias VesseltrackingLive.Track.Step
 
-fleet = VesseltrackingLive.Repo.insert!(%Fleet{name: "testfleet"})
+%{email: "koen@zonatracking.com", password: "password1234"}
+|> VesseltrackingLive.Accounts.register_user()
+
+1..3
+|> Enum.each(fn i ->
+  %{name: "testfleet #{System.unique_integer()}"}
+  |> Fleets.create_fleet()
+end)
 
 1..3
 |> Enum.each(fn i ->
   %{
-    name: "test vessel #{i}",
+    name: "test vessel #{System.unique_integer()}",
     tracking_id: :crypto.strong_rand_bytes(8) |> Base.url_encode64(),
     fleet_id: fleet.id
   }
@@ -44,7 +51,7 @@ alias VesseltrackingLive.Certificate.TokenUser
     created_at: ~U[2024-03-16 10:04:00Z],
     expires_at: ~U[2024-03-16 10:04:00Z],
     pubkey: pub,
-    username: "some username"
+    username: "some username #{System.unique_integer()}"
   }
   |> VesseltrackingLive.Certificate.create_token_user()
 end)

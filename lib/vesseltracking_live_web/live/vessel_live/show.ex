@@ -2,10 +2,25 @@ defmodule VesseltrackingLiveWeb.VesselLive.Show do
   use VesseltrackingLiveWeb, :live_view
 
   alias VesseltrackingLive.Fleets
+  alias VesseltrackingLive.Track
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(fleet_id: nil)}
+    options =
+      Fleets.list_fleets()
+      |> Enum.map(fn fleet -> {:"#{fleet.name}", fleet.id} end)
+
+    tracking_id_options =
+      Track.list_unclaimed_trails()
+      |> Enum.map(fn trail -> {:"#{trail.tracking_id}", trail.tracking_id} end)
+
+    socket =
+      socket
+      |> assign(fleet_options: options)
+      |> assign(tracking_id_options: tracking_id_options)
+      |> assign(return_fleet: nil)
+
+    {:ok, socket}
   end
 
   @impl true
@@ -14,7 +29,7 @@ defmodule VesseltrackingLiveWeb.VesselLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:vessel, Fleets.get_vessel!(id))
-     |> assign(:fleet_id, fleet_id)}
+     |> assign(:return_fleet, Fleets.get_fleet!(fleet_id))}
   end
 
   @impl true

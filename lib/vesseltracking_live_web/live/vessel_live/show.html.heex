@@ -1,5 +1,5 @@
 <.header>
-  Vessel <%= @vessel.id %>
+  Vessel <%= @vessel.name %>
   <:subtitle>This is a vessel record from your database.</:subtitle>
   <:actions>
     <.link patch={~p"/vessels/#{@vessel}/show/edit"} phx-click={JS.push_focus()}>
@@ -13,8 +13,8 @@
   <:item title="Tracking Id"><%= @vessel.tracking_id %></:item>
 </.list>
 
-<.back :if={@fleet_id != nil} navigate={~p"/fleets/#{@fleet_id}"}>
-  Back to fleet <%= @fleet_id %>
+<.back :if={@return_fleet != nil} navigate={~p"/fleets/#{@return_fleet}"}>
+  Back to fleet <%= @return_fleet.name %>
 </.back>
 
 <.back navigate={~p"/vessels"}>Back to vessels</.back>
@@ -28,6 +28,8 @@
   <.live_component
     module={VesseltrackingLiveWeb.VesselLive.FormComponent}
     id={@vessel.id}
+    fleet_options={@fleet_options}
+    tracking_id_options={@tracking_id_options}
     title={@page_title}
     action={@live_action}
     vessel={@vessel}
