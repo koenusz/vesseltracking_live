@@ -93,8 +93,8 @@ defmodule VesseltrackingLiveWeb.FleetLiveTest do
     test "updates fleet within modal", %{conn: conn, fleet: fleet} do
       {:ok, show_live, _html} = live(conn, ~p"/fleets/#{fleet}")
 
-      assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Fleet"
+      assert show_live |> element("a", "Edit fleet") |> render_click() =~
+               "Edit fleet"
 
       assert_patch(show_live, ~p"/fleets/#{fleet}/show/edit")
 
