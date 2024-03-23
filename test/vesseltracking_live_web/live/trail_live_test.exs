@@ -9,14 +9,11 @@ defmodule VesseltrackingLiveWeb.TrailLiveTest do
   @update_attrs %{day: "2024-03-13", steps: [], tracking_id: "some updated tracking_id"}
   @invalid_attrs %{day: nil, steps: [], tracking_id: nil}
 
-  setup %{conn: conn} do
-    user = user_fixture()
-
-    {:ok, conn: put_req_header(conn, "accept", "application/json"), user: user}
-  end
+  setup conn, do: register_and_log_in_user(conn)
 
   defp create_trail(_) do
-    trail = trail_fixture()
+    {:ok, trail} = trail_fixture()
+
     %{trail: trail}
   end
 

@@ -2,6 +2,7 @@ defmodule VesseltrackingLive.Track.Step do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Ecto.UUID
   alias VesseltrackingLive.Track.Step
 
   # embedded_schema is short for:
@@ -36,12 +37,13 @@ defmodule VesseltrackingLive.Track.Step do
   @doc false
   def changeset(%{} = step, attrs) do
     step
-    |> cast(attrs, [:origin_timestamp, :point])
-    |> validate_required([:origin_timestamp, :point])
+    |> maybe_generate_id()
+    |> cast(attrs, [:id, :origin_timestamp, :point])
+    |> validate_required([:id, :origin_timestamp, :point])
   end
 
   def from_point(%Geo.Point{} = point) do
-    %__MODULE__{origin_timestamp: DateTime.utc_now(), point: point}
+    %__MODULE__{id: UUID.generate(), origin_timestamp: DateTime.utc_now(), point: point}
   end
 
   def to_map(%Step{} = step) do
@@ -49,5 +51,14 @@ defmodule VesseltrackingLive.Track.Step do
     |> Map.from_struct()
     |> Enum.reject(fn {_, val} -> val == nil end)
     |> Map.new(fn {k, v} -> {Atom.to_string(k), v} end)
+  end
+
+  defp maybe_generate_id(step) do
+    if(step.id == nil) do
+      step
+      |> Enum.into(%{id: UUID.generate()})
+    else
+      step
+    end
   end
 end

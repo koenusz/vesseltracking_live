@@ -10,7 +10,6 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 alias VesseltrackingLive.Fleets
-alias VesseltrackingLive.Fleets.{Fleet, Vessel}
 alias VesseltrackingLive.Track
 alias VesseltrackingLive.Track.Step
 
@@ -18,13 +17,17 @@ alias VesseltrackingLive.Track.Step
 |> VesseltrackingLive.Accounts.register_user()
 
 1..3
-|> Enum.each(fn i ->
+|> Enum.each(fn _ ->
   %{name: "testfleet #{System.unique_integer()}"}
   |> Fleets.create_fleet()
 end)
 
+{:ok, fleet} =
+  %{name: "fleet with vessels #{System.unique_integer()}"}
+  |> Fleets.create_fleet()
+
 1..3
-|> Enum.each(fn i ->
+|> Enum.each(fn _ ->
   %{
     name: "test vessel #{System.unique_integer()}",
     tracking_id: :crypto.strong_rand_bytes(8) |> Base.url_encode64(),

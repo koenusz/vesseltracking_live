@@ -10,9 +10,26 @@
 
 <.list>
   <:item title="Day"><%= @trail.day %></:item>
-  <:item title="Steps"><%= @trail.steps %></:item>
+  <%!-- <:item title="Steps"><%= @trail.steps %></:item> --%>
   <:item title="Tracking Id"><%= @trail.tracking_id %></:item>
   <:item :if={@vessel} title="Vessel"><%= @vessel.name %></:item>
+</.list>
+
+<.list>
+  <:item :for={step <- @trail.steps} title="step">
+    <div>
+      Id: <%= step["id"] %>
+    </div>
+    <div>
+      Point: {<%= step["point"].coordinates |> elem(0) %>, <%= step["point"].coordinates
+      |> elem(1) %>}
+    </div>
+    <div>
+      Origin Timestap: <%= step["origin_timestamp"]
+      |> DateTime.truncate(:second)
+      |> DateTime.to_string() %>
+    </div>
+  </:item>
 </.list>
 
 <.back navigate={~p"/trails"}>Back to trails</.back>
