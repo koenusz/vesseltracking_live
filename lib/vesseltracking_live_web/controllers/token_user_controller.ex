@@ -2,16 +2,19 @@ defmodule VesseltrackingLiveWeb.TokenUserController do
   use VesseltrackingLiveWeb, :controller
 
   alias VesseltrackingLive.Certificate
-  alias VesseltrackingLive.ChallengeAgent
+  alias VesseltrackingLive.Certificate.ChallengeAgent
 
   action_fallback VesseltrackingLiveWeb.FallbackController
 
   def request_access(conn, %{
         "user_name" => user_name,
         "pub_key" => pem,
+        "digest" => digest,
         "signature" => signature
       }) do
-    if Certificate.verify(pem, signature, pem) do
+    digest_check = Certificate.digest(pem, user_name)
+
+    if Certificate.verify(digest, signature, pem) && digest == digest_check do
       %{
         comment: "",
         username: user_name,

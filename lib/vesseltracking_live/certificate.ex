@@ -146,4 +146,13 @@ defmodule VesseltrackingLive.Certificate do
     [{_, der, _}] = :public_key.pem_decode(pem)
     :public_key.der_decode(:RSAPublicKey, der)
   end
+
+  def digest(pem, user_name) do
+    %{pem: pem, user_name: user_name}
+    |> :erlang.term_to_binary()
+    |> hash()
+    |> Base.encode16()
+  end
+
+  defp hash(bin), do: :crypto.hash(:sha256, bin)
 end
