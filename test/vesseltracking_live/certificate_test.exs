@@ -101,4 +101,30 @@ defmodule VesseltrackingLive.CertificateTest do
       assert %Ecto.Changeset{} = Certificate.change_token_user(token_user)
     end
   end
+
+  describe "cryptography" do
+    test "sign and verify" do
+      msg = "bla"
+
+      pr_key = Certificate.generate_private_key(1024)
+
+      pub_key = Certificate.public_key_from_private_key(pr_key)
+
+      signature = Certificate.sign(msg, pr_key)
+
+      assert Certificate.verify(msg, signature, pub_key)
+    end
+
+    test "create a pem" do
+      pr_key = Certificate.generate_private_key(1024)
+
+      pub_key = Certificate.public_key_from_private_key(pr_key)
+
+      pem = Certificate.pem_encoded_public_key(pr_key)
+
+      assert pem =~ "-----BEGIN RSA PUBLIC KEY-----"
+
+      assert pub_key == Certificate.pem_decode_public_key(pem)
+    end
+  end
 end

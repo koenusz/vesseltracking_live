@@ -26,6 +26,8 @@ defmodule VesseltrackingLiveWeb.Router do
   scope "/api", VesseltrackingLiveWeb do
     pipe_through [:api]
 
+    post "/request_access", TokenUserController, :request_access
+
     get "/trails/last/:tracking_id/:days", TrackController, :last_trails
 
     get "/vessels/:id", VesselController, :show

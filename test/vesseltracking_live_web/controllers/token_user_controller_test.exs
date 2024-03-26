@@ -4,41 +4,29 @@ defmodule VesseltrackingLiveWeb.TokenUserControllerTest do
   import VesseltrackingLive.CertificateFixtures
 
   alias VesseltrackingLive.Certificate.TokenUser
-
-  @create_attrs %{
-    comment: "some comment",
-    username: "some username",
-    pubkey: "some pubkey",
-    approved?: true,
-    created_at: ~U[2024-03-16 10:04:00Z],
-    expires_at: ~U[2024-03-16 10:04:00Z]
-  }
-  @update_attrs %{
-    comment: "some updated comment",
-    username: "some updated username",
-    pubkey: "some updated pubkey",
-    approved?: false,
-    created_at: ~U[2024-03-17 10:04:00Z],
-    expires_at: ~U[2024-03-17 10:04:00Z]
-  }
-  @invalid_attrs %{
-    comment: nil,
-    username: nil,
-    pubkey: nil,
-    approved?: nil,
-    created_at: nil,
-    expires_at: nil
-  }
+  alias VesseltrackingLive.Certificate
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "index" do
-    test "lists all token_users", %{conn: conn} do
-      conn = get(conn, ~p"/api/token_users")
-      assert json_response(conn, 200)["data"] == []
-    end
+  test "request Access", %{conn: conn} do
+    pr_key = Certificate.generate_private_key(1024)
+
+    pem =
+      pr_key
+      |> Certificate.pem_encoded_public_key()
+
+    signature = Certificate.sign(pem, pr_key)
+
+    conn =
+      post(conn, ~p"/api/request_access", %{
+        user_name: "user_name",
+        pub_key: pem,
+        signature: signature
+      })
+
+    assert %{"msg" => "request received"} == json_response(conn, 200)
   end
 
   describe "create token_user" do

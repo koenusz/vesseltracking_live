@@ -6,22 +6,26 @@ defmodule VesseltrackingLiveWeb.TokenUserController do
 
   action_fallback VesseltrackingLiveWeb.FallbackController
 
-  def request_access(conn, %{user_name: user_name, pub_key: pub_key, signature: signature}) do
-    if :public_key.verify(pub_key, :sha256, signature, pub_key) do
+  def request_access(conn, %{
+        "user_name" => user_name,
+        "pub_key" => pem,
+        "signature" => signature
+      }) do
+    if Certificate.verify(pem, signature, pem) do
       %{
         comment: "",
         username: user_name,
-        pubkey: pub_key,
+        pubkey: pem,
         approved?: false,
         created_at: DateTime.utc_now(),
         expires_at: DateTime.utc_now() |> DateTime.add(365, :day)
       }
       |> Certificate.create_token_user()
 
-      send_resp(conn, 200, "")
+      json(conn, %{msg: "request received"})
+    else
+      {:error, :unauthorized}
     end
-
-    send_resp(conn, 401, "")
   end
 
   def login(conn, %{token_user_id: token_user_id}) do

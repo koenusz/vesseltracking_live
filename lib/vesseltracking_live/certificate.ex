@@ -110,4 +110,40 @@ defmodule VesseltrackingLive.Certificate do
   def change_token_user(%TokenUser{} = token_user, attrs \\ %{}) do
     TokenUser.changeset(token_user, attrs)
   end
+
+  def sign(msg, private_key) do
+    :public_key.sign(msg, :sha256, private_key)
+  end
+
+  def verify(msg, signature, pub_key) when is_binary(pub_key) do
+    verify(msg, signature, pem_decode_public_key(pub_key))
+  end
+
+  def verify(msg, signature, pub_key) do
+    :public_key.verify(msg, :sha256, signature, pub_key)
+  end
+
+  def pem_encoded_public_key(private_key) do
+    private_key
+    |> public_key_from_private_key()
+    |> pem_entry_encode(:RSAPublicKey)
+  end
+
+  def generate_private_key(size \\ 4096) do
+    :public_key.generate_key({:rsa, size, 65537})
+  end
+
+  def public_key_from_private_key(private_key) do
+    {:RSAPublicKey, elem(private_key, 2), elem(private_key, 3)}
+  end
+
+  def pem_entry_encode(key, type) do
+    pemEntry = :public_key.pem_entry_encode(type, key)
+    :public_key.pem_encode([pemEntry])
+  end
+
+  def pem_decode_public_key(pem) do
+    [{_, der, _}] = :public_key.pem_decode(pem)
+    :public_key.der_decode(:RSAPublicKey, der)
+  end
 end

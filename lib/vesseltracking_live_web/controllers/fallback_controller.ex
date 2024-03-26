@@ -21,4 +21,11 @@ defmodule VesseltrackingLiveWeb.FallbackController do
     |> put_view(html: VesseltrackingLiveWeb.ErrorHTML, json: VesseltrackingLiveWeb.ErrorJSON)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(html: VesseltrackingLiveWeb.ErrorHTML, json: VesseltrackingLiveWeb.ErrorJSON)
+    |> render(:"401")
+  end
 end
